@@ -4,35 +4,39 @@
 # Date: 2016.5.30
 # ======================================================================
 from src.dao.base_dao import BaseDao
+from src.info.weapon_info import WeaponInfo
 
 
 class WeaponInfoDao(BaseDao):
 
-    def get_list_by_player_id(self, player_id):
-        self.cursor.execute('select a.enemy_id, a.enemy_type_id, a.health, b.max_health, a.position_x, a.position_y, '
-                            'a.position_z, b.hurt, b.experience from weapon_record a, weapon_type_config b '
-                            'where a.player_id = ? and a.weapon_type_id=b.type_id', (player_id,))
+    def get_list_by_player_id(self):
+        self.cursor.execute('select a.weapon_id, b.weapon_type, a.fetch, a.current_bullets_in_gun, a.current_bullets_in_bag,'
+                            'b.max_bullets_in_gun, b.max_bullets_in_bag, a.position_x, a.position_y, a.position_z, b.hurt,'
+                            'from weapon_record a, weapon_type_config b where a.player_id = ? and a.weapon_type_id=b.type_id',
+                            (self.player_id,))
         return self.data_to_list(self.cursor.fetchall())
 
-    def insert(self, player_id, enemy_info):
-        self.cursor.execute('insert into enemy_record (player_id, enemy_id, enemy_type_id, health, position_x, '
-                            'position_y, position_z) values (?, ?, ?, ?, ?, ?, ?,)', (player_id, enemy_info.enemy_id,
-                            enemy_info.enemy_type, enemy_info.health, enemy_info.position[0], enemy_info.position[1],
-                            enemy_info.position[2],))
+    def insert(self, weapon_info):
+        self.cursor.execute('insert into weapon_record (player_id, weapon_type_id, fetch, current_bullets_in_gun'
+                            'current_bullets_in_bag, position_x, position_y, position_z) values (?, ?, ?, ?, ?, ?, ?, ?,)',
+                            (weapon_info.weapon_id, self.player_id, weapon_info.weapon_type_id, weapon_info.fetch,
+                             weapon_info.current_bullets_in_gun, weapon_info.current_bullets_in_bag, weapon_info.position[0],
+                             weapon_info.position[1], weapon_info.position[2],))
         return self.cursor.rowcount
 
-    def update(self, player_id, enemy_info):
-        self.cursor.execute('update enemy_record set health=?, position_x=?, position_y=?, position_z=?) where '
-                            'player_id=? and enemy_id=?', (enemy_info.health, enemy_info.position[0], enemy_info.position[1],
-                            enemy_info.position[2], player_id, enemy_info.enemy_id,))
+    def update(self, weapon_info):
+        self.cursor.execute('update weapon_record set fetch=?, current_bullets_in_gun=?, current_bullets_in_bag=?,'
+                            'position_x=?, position_y=?, position_z=?) where player_id=? and weapon_id=?',
+                            (weapon_info.fetch, weapon_info.current_bullets_in_gun, weapon_info.current_bullets_in_bag,
+                             weapon_info.position[0], weapon_info.position[1],weapon_info.position[2],self.player_id, weapon_info.weapon_id,))
         return self.cursor.rowcount
 
-    def delete(self, player_id, enemy_info):
-        self.cursor.execute('delete from enemy_record where player_id=? and enemy_id=?', (player_id, enemy_info.enemy_id,))
+    def delete(self, weapon_id):
+        self.cursor.execute('delete from enemy_record where player_id=? and weapon_id=?', (self.player_id, weapon_id,))
         return self.cursor.rowcount
 
     def data_to_list(self, data_list):
-        enemy_info_list = []
+        weapon_info_list = []
         for data in data_list:
-            enemy_info_list.append(EnemyInfo(data))
-        return enemy_info_list
+            weapon_info_list.append(WeaponInfo(data))
+        return weapon_info_list

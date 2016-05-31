@@ -7,7 +7,7 @@
 
 class UserInfo(object):
 
-    def __init__(self, id, name, password):
-        self.__id = id
-        self.__name = name
-        self.__password = password
+    def __init__(self, id=0, name='', password=''):
+        self.player_id = id
+        self.name = name
+        self.password = password

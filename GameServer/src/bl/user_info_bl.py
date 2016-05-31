@@ -15,7 +15,7 @@ class UserInfoBL(object):
     def check_exist(self, name):
         r = self.dao.get_count_by_name(name)
         if r > 0:
-            raise Exception('The username has existed!')
+            return False
         return True
 
     # Get user info by name
@@ -29,5 +29,13 @@ class UserInfoBL(object):
     # Add user info
     def add_user(self, name, password):
         rc = self.dao.insert(name, password)
-        self.dao.commit()
+        #self.dao.commit()
         return rc > 0
+
+    # Rollback
+    def rollback(self):
+        self.dao.rollback()
+
+    # Commit
+    def commit(self):
+        self.dao.commit()

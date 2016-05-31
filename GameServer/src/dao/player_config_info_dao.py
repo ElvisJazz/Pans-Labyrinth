@@ -11,7 +11,7 @@ class PlayerConfigInfoDao(BaseDao):
 
     def get_player_config_by_id(self, id):
         self.cursor.execute('select * from player_type_config where type_id=?', (id,))
-        return self.data_to_object(self.cursor.fetchall()[0])
+        return self.data_to_object(self.cursor.fetchone())
 
     def data_to_object(self, data_tuple):
         return PlayerConfigInfo(data_tuple)

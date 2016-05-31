@@ -8,9 +8,10 @@ from src.database.dbcp_manager import DBCPManager
 
 class BaseDao(object):
 
-    def __init__(self):
-        self.conn = DBCPManager.get_connection()
+    def __init__(self, player_id):
+        self.conn = DBCPManager.get_connection(player_id)
         self.cursor = self.conn.cursor()
+        self.player_id = player_id
 
     def data_to_object(self, data_tuple):
         pass

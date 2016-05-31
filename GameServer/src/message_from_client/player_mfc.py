@@ -13,15 +13,15 @@ class PlayerMessageFromClient(object):
 
     def set_player_info(self, player_info):
         if isinstance(player_info, PlayerInfo):
-            if hasattr(self, '_player_id'):
-                player_info._player_id = self._player_id
-            elif hasattr(self, '_position'):
-                player_info._position = self._position
-            elif hasattr(self, '_health'):
-                player_info._health = self._health
-            elif hasattr(self, '_experience'):
-                player_info._experience = self._experience
-            elif hasattr(self, '_weapon_list'):
-                player_info._weapon_list = self._weapon_list
+            if hasattr(self, 'player_id'):
+                player_info.player_id = self.player_id
+            elif hasattr(self, 'position'):
+                player_info.position = self.position
+            elif hasattr(self, 'health'):
+                player_info.health = self.health
+            elif hasattr(self, 'experience'):
+                player_info.experience = self.experience
+            elif hasattr(self, 'weapon_list'):
+                player_info.weapon_list = self.weapon_list
         else:
             raise Exception("Instance of PlayerInfo is expected!")

@@ -1,6 +1,8 @@
 from src.config.config_manager import ConfigManager
 from src.dao.user_info_dao import UserInfoDao
 from src.database.dbcp_manager import DBCPManager
+from src.manager.user.register_manager import RegisterManager
+from src.message_from_client.register_mfc import RegisterMessageFromClient
 
 __author__ = 'ElvisJia'
 
@@ -51,9 +53,14 @@ def _input():
 #     (host, port) = "127.0.0.1", 6500; # sys.argv[2:];
 #     server = EchoServer(host, port);
 #     asyncore.loop();
-
 ConfigManager.init()
-DBCPManager.init()
-u = UserInfoDao()
-l = u.insert('hh23', '123')
-print(l)
+
+# rm = RegisterManager()
+# rmfc = RegisterMessageFromClient()
+# rmfc.name = 'jiazhizhong'
+# rmfc.password = '122'
+# rm.register(rmfc)
+# DBCPManager.destroy()
+
+DBCPManager.get_connection('1')
+print(2)

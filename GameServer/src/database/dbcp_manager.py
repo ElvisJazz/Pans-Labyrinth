@@ -9,43 +9,40 @@ from src.config.config_manager import ConfigManager
 
 class DBCPManager(object):
 
-    # default connection
-    __default_conn = None
-    # connection dict
-    __conn_dict = {}
+    # free connection list
+    free_conn_list = []
+    # busy connection dict
+    busy_conn_dict = {}
+    # max connections
+    MAX_CONNS = 100
 
     @classmethod
-    def init(cls):
-        cls.__default_conn = sqlite3.connect(ConfigManager.DB_file)
-        cls.__conn_dict[ConfigManager.DB_file] = cls.__default_conn
+    def get_connection(cls, user_id):
+        if cls.busy_conn_dict.has_key(user_id):
+            return cls.busy_conn_dict[user_id]
+        elif len(cls.free_conn_list)+len(cls.busy_conn_dict) < cls.MAX_CONNS:
+            if len(cls.free_conn_list) > 0:
+                cls.busy_conn_dict[user_id] = cls.free_conn_list.pop(0)
+            else:
+                cls.busy_conn_dict[user_id] = sqlite3.connect(ConfigManager.DB_file)
+            return cls.busy_conn_dict[user_id]
+        return None
 
     @classmethod
-    def get_connection(cls, db_file=''):
-        if db_file == '':
-            return cls.__default_conn
-        elif cls.__conn_dict.has_key(db_file):
-            return cls.__conn_dict[db_file]
-        else:
-            cls.__conn_dict[db_file] = sqlite3.connect(db_file)
-            return cls.__conn_dict[db_file]
-
-    @classmethod
-    def close_conn(cls, db_file):
-        if ConfigManager.DB_file == db_file:
-            cls.__conn_dict.pop(db_file)
-            cls.__default_conn.close()
-            cls.__default_conn = None
-        elif cls.__conn_dict.has_key(db_file):
-            cls.__conn_dict[db_file].close()
-            cls.__conn_dict.pop(db_file)
+    def close_conn(cls, user_id):
+        conn = cls.busy_conn_dict.pop(user_id)
+        if conn is not None:
+            cls.free_conn_list.append(conn)
 
     @classmethod
     def close_all_conn(cls):
-        for db_file in cls.__conn_dict:
-            cls.__conn_dict[db_file].close()
-            cls.__conn_dict.pop(db_file)
-        cls.__default_conn = None
+        for conn in cls.free_conn_list:
+            conn.close()
+        for key in cls.busy_conn_dict:
+            cls.busy_conn_dict[key].close()
+        cls.free_conn_list = []
+        cls.busy_conn_dict = {}
 
     @classmethod
     def destroy(cls):
-        cls.close_all()
+        cls.close_all_conn()

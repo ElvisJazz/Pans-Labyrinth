@@ -6,10 +6,10 @@
 from src.dao.player_config_info_dao import PlayerConfigInfoDao
 
 
-class PlayerInfoBL(object):
+class PlayerConfigInfoBL(object):
 
-    def __init__(self):
-        self.dao = PlayerConfigInfoDao()
+    def __init__(self, player_id):
+        self.dao = PlayerConfigInfoDao(player_id)
 
     # Get player config
     def get_by_id(self, id):
