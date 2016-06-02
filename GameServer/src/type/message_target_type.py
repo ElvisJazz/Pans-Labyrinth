@@ -10,6 +10,4 @@ class MessageTargetType(object):
     PLAYER = 0
     ENEMY = 1
     WEAPON = 2
-    REGISTER = 3
-    LOGIN = 4
-    LOGOUT = 5
+    SYSTEM = 3

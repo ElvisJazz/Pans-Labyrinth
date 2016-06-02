@@ -1,13 +1,21 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Weapon\Script\WeaponController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\MessagePacker.cs">
     <Files>
-      <File FileName="Assets\Script\PickupWeapon.cs" Line="1" Column="1" />
-      <File FileName="Assets\Role\Script\PlayerMover.cs" Line="1" Column="1" />
-      <File FileName="Assets\Weapon\Script\WeaponController.cs" Line="88" Column="14" />
-      <File FileName="Assets\Script\WeaponInfoController.cs" Line="133" Column="1" />
-      <File FileName="Assets\Script\WeaponSelector.cs" Line="41" Column="4" />
+      <File FileName="Assets\Script\GameController.cs" Line="21" Column="15" NotebookId="1" />
+      <File FileName="Assets\Script\ButtonController.cs" Line="128" Column="37" NotebookId="1" />
+      <File FileName="Assets\Script\MessagePacker.cs" Line="34" Column="3" NotebookId="1" />
+      <File FileName="Assets\Script\ClientSender.cs" Line="69" Column="13" NotebookId="1" />
+      <File FileName="Assets\Weapon\Script\BulletEffect.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets\Script\MessageTip.cs" Line="11" Column="2" NotebookId="1" />
     </Files>
+    <FloatingWindows>
+      <FloatingWindow WindowId="1" X="1358" Y="-8" Width="1024" Height="705">
+        <Files>
+          <File FileName="Assets\Role\Script\PlayerMover.cs" Line="1" Column="1" />
+        </Files>
+      </FloatingWindow>
+    </FloatingWindows>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

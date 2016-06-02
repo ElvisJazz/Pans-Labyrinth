@@ -3,10 +3,11 @@
 # Author: Elvis Jia
 # Date: 2016.5.30
 # ======================================================================
-from src.dao.enemy_info_dao import EnemyInfoDao
+from bl.base_bl import BaseBL
+from dao.enemy_info_dao import EnemyInfoDao
 
 
-class EnemyInfoBL(object):
+class EnemyInfoBL(BaseBL):
 
     def __init__(self, player_id):
         self.dao = EnemyInfoDao(player_id)

@@ -1,14 +1,14 @@
-from src.config.config_manager import ConfigManager
-from src.dao.user_info_dao import UserInfoDao
-from src.database.dbcp_manager import DBCPManager
-from src.manager.user.register_manager import RegisterManager
-from src.message_from_client.register_mfc import RegisterMessageFromClient
+import sqlite3
+from database.dbcp_manager import DBCPManager
+from manager.user.register_manager import RegisterManager
+from message_from_client.register_mfc import RegisterMessageFromClient
+from config.config_manager import ConfigManager
 
 __author__ = 'ElvisJia'
 
-import sys,os,time;
+import time;
 import asyncore,socket;
-import thread;
+
 
 class EchoServer(asyncore.dispatcher):
     def __init__(self, host, port):
@@ -26,15 +26,20 @@ class EchoServer(asyncore.dispatcher):
         print("incoming client: %s"%(repr(addr)));
         handler = EchoHandler(sock);
 
+
 class EchoHandler(asyncore.dispatcher_with_send):
 
     def handle_read(self):
         data = self.recv(8192);
         if data is None:
             return;
-        self.send("winlin");
+        self.send("abcdefghijeklmnopqrstuvwxyz");
         time.sleep(3);
         self.send(data);
+
+    def handle_close(self):
+        print("closed client: %s"%(repr(self.addr)));
+        self.close()
 
 
 def _input():
@@ -42,25 +47,10 @@ def _input():
         data0 = raw_input();
         #client.send(data0)
 
-#
-# mode = "client";
-# if mode == "client":
-#     (host, port, path) = "127.0.0.1", 6500, "fd";  #sys.argv[2:];
-#     client = HTTPClient(host, port, path);
-#     thread.start_new_thread(_input,());
-#     asyncore.loop();
-# else:
-#     (host, port) = "127.0.0.1", 6500; # sys.argv[2:];
-#     server = EchoServer(host, port);
-#     asyncore.loop();
-ConfigManager.init()
 
-# rm = RegisterManager()
-# rmfc = RegisterMessageFromClient()
-# rmfc.name = 'jiazhizhong'
-# rmfc.password = '122'
-# rm.register(rmfc)
-# DBCPManager.destroy()
 
-DBCPManager.get_connection('1')
-print(2)
+(host, port) = "127.0.0.1", 6500; # sys.argv[2:];
+server = EchoServer(host, port)
+asyncore.loop()
+
+

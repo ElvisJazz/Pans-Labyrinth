@@ -3,7 +3,7 @@
 # # Author: Elvis Jia
 # # Date: 2016.5.28
 # # ======================================================================
-# from src.config.data_file_path import DataFilePath
+# from src1.config.data_file_path import DataFilePath
 #
 # try:
 #     import cPickle as pickle

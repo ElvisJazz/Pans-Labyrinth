@@ -3,10 +3,11 @@
 # Author: Elvis Jia
 # Date: 2016.5.30
 # ======================================================================
-from src.dao.weapon_info_dao import WeaponInfoDao
+from bl.base_bl import BaseBL
+from dao.weapon_info_dao import WeaponInfoDao
 
 
-class WeaponInfoBL(object):
+class WeaponInfoBL(BaseBL):
 
     def __init__(self, player_id):
         self.dao = WeaponInfoDao(player_id)

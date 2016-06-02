@@ -72,9 +72,13 @@
      <Compile Include="Assets\Role\Script\PlayerExp.cs" />
      <Compile Include="Assets\Role\Script\PlayerHealth.cs" />
      <Compile Include="Assets\Role\Script\PlayerMover.cs" />
+     <Compile Include="Assets\Script\ButtonController.cs" />
+     <Compile Include="Assets\Script\ClientSender.cs" />
      <Compile Include="Assets\Script\ExpInfoController.cs" />
      <Compile Include="Assets\Script\GameController.cs" />
      <Compile Include="Assets\Script\HealthInfoController.cs" />
+     <Compile Include="Assets\Script\MessagePacker.cs" />
+     <Compile Include="Assets\Script\MessageTip.cs" />
      <Compile Include="Assets\Script\PickupWeapon.cs" />
      <Compile Include="Assets\Script\WeaponInfoController.cs" />
      <Compile Include="Assets\Script\WeaponSelector.cs" />
@@ -100,6 +104,9 @@
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="LitJson">
+ <HintPath>W:/Project/Pans-Labyrinth/GirlTest/Assets/LitJson.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -3,8 +3,8 @@
 # Author: Elvis Jia
 # Date: 2016.5.27
 # ======================================================================
-from src.info.player_info import PlayerInfo
-from src.type.message_type import MessageType
+from info.player_info import PlayerInfo
+from type.message_type import MessageType
 
 
 class PlayerMessageToClient(object):

@@ -6,9 +6,9 @@
 
 class EnemyInfo(object):
 
-    def __init__(self, enemy_id, enemy_type, health, max_health, position, hurt, experience, target_position=(0,0,0)):
+    def __init__(self, enemy_id, enemy_type_id, health, max_health, position, hurt, experience, target_position=(0,0,0)):
         self.enemy_id = enemy_id
-        self.enemy_type = enemy_type
+        self.enemy_type_id = enemy_type_id
         self.health = health
         self.max_health = max_health
         self.position = position

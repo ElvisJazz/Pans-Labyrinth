@@ -3,10 +3,11 @@
 # Author: Elvis Jia
 # Date: 2016.5.30
 # ======================================================================
-from src.dao.player_info_dao import PlayerInfoDao
+from bl.base_bl import BaseBL
+from dao.player_info_dao import PlayerInfoDao
 
 
-class PlayerInfoBL(object):
+class PlayerInfoBL(BaseBL):
 
     def __init__(self, player_id):
         self.dao = PlayerInfoDao(player_id)

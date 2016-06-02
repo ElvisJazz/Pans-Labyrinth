@@ -7,7 +7,7 @@
 
 class WeaponType(object):
 
-    FAL = "FAL"
-    M1911 = "M1911"
-    SPAS12 = "SPAS12"
-    THUMPER = "THUMPER"
+    FAL = 0 # "FAL"
+    M1911 = 1 # "M1911"
+    SPAS12 = 2 # "SPAS12"
+    THUMPER = 3 # "THUMPER"

@@ -3,10 +3,11 @@
 # Author: Elvis Jia
 # Date: 2016.5.30
 # ======================================================================
-from src.dao.user_info_dao import UserInfoDao
+from bl.base_bl import BaseBL
+from dao.user_info_dao import UserInfoDao
 
 
-class UserInfoBL(object):
+class UserInfoBL(BaseBL):
 
     def __init__(self):
         self.dao = UserInfoDao()
@@ -15,8 +16,8 @@ class UserInfoBL(object):
     def check_exist(self, name):
         r = self.dao.get_count_by_name(name)
         if r > 0:
-            return False
-        return True
+            return True
+        return False
 
     # Get user info by name
     def get_user_by_name(self, name):
@@ -31,11 +32,3 @@ class UserInfoBL(object):
         rc = self.dao.insert(name, password)
         #self.dao.commit()
         return rc > 0
-
-    # Rollback
-    def rollback(self):
-        self.dao.rollback()
-
-    # Commit
-    def commit(self):
-        self.dao.commit()

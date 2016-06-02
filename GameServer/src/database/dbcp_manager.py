@@ -4,7 +4,8 @@
 # Date: 2016.5.30
 # ======================================================================
 import sqlite3
-from src.config.config_manager import ConfigManager
+
+from config.config_manager import ConfigManager
 
 
 class DBCPManager(object):
@@ -17,8 +18,10 @@ class DBCPManager(object):
     MAX_CONNS = 100
 
     @classmethod
-    def get_connection(cls, user_id):
-        if cls.busy_conn_dict.has_key(user_id):
+    def get_connection(cls, user_id=-1):
+        if user_id == -1:
+            return sqlite3.connect(ConfigManager.DB_file)
+        elif cls.busy_conn_dict.has_key(user_id):
             return cls.busy_conn_dict[user_id]
         elif len(cls.free_conn_list)+len(cls.busy_conn_dict) < cls.MAX_CONNS:
             if len(cls.free_conn_list) > 0:

@@ -3,10 +3,9 @@
 # Author: Elvis Jia
 # Date: 2016.5.28
 # ======================================================================
-from src.config.directory_path import DirectoryPath
-from src.manager.game.enemy_manager import EnemyManager
-from src.manager.game.player_manager import PlayerManager
-from src.manager.game.scene_manager import SceneManager
+from manager.game.enemy_manager import EnemyManager
+from manager.game.player_manager import PlayerManager
+from manager.game.scene_manager import SceneManager
 
 
 class GameManager(object):

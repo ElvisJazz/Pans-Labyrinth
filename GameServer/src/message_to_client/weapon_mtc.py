@@ -3,8 +3,8 @@
 # Author: Elvis Jia
 # Date: 2016.5.27
 # ======================================================================
-from src.info.weapon_info import WeaponInfo
-from src.type.message_type import MessageType
+from info.weapon_info import WeaponInfo
+from type.message_type import MessageType
 
 
 class WeaponMessageToClient(object):

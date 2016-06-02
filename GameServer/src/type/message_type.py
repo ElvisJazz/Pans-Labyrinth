@@ -7,11 +7,11 @@
 
 class MessageType(object):
 
-    CREATE = 0
-    UPDATE = 1
-    RUN = 2
-    ATTACK = 3
-    SAVE = 4
-    REGISTER = 5
-    LOGIN = 6
-    LOGOUT = 7
+    REGISTER = 0
+    LOGIN = 1
+    LOGOUT = 2
+    CREATE = 3
+    UPDATE = 4
+    RUN = 5
+    ATTACK = 6
+    SAVE = 7

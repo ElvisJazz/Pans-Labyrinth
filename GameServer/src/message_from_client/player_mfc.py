@@ -3,7 +3,7 @@
 # Author: Elvis Jia
 # Date: 2016.5.27
 # ======================================================================
-from src.info.player_info import PlayerInfo
+from info.player_info import PlayerInfo
 
 
 class PlayerMessageFromClient(object):
@@ -15,13 +15,13 @@ class PlayerMessageFromClient(object):
         if isinstance(player_info, PlayerInfo):
             if hasattr(self, 'player_id'):
                 player_info.player_id = self.player_id
-            elif hasattr(self, 'position'):
+            if hasattr(self, 'position'):
                 player_info.position = self.position
-            elif hasattr(self, 'health'):
+            if hasattr(self, 'health'):
                 player_info.health = self.health
-            elif hasattr(self, 'experience'):
+            if hasattr(self, 'experience'):
                 player_info.experience = self.experience
-            elif hasattr(self, 'weapon_list'):
+            if hasattr(self, 'weapon_list'):
                 player_info.weapon_list = self.weapon_list
         else:
             raise Exception("Instance of PlayerInfo is expected!")

@@ -3,7 +3,7 @@
 # Author: Elvis Jia
 # Date: 2016.5.27
 # ======================================================================
-from src.info.weapon_info import WeaponInfo
+from info.weapon_info import WeaponInfo
 
 
 class WeaponMessageFromClient(object):
@@ -15,7 +15,7 @@ class WeaponMessageFromClient(object):
         if isinstance(weapon_info, WeaponInfo):
             if hasattr(self, 'weapon_id'):
                 weapon_info.weapon_id = self.weapon_id
-            elif hasattr(self, 'fetch'):
+            if hasattr(self, 'fetch'):
                 weapon_info.health = self.fetch
         else:
             raise Exception("Instance of WeaponInfo is expected!")

@@ -3,8 +3,8 @@
 # Author: Elvis Jia
 # Date: 2016.5.30
 # ======================================================================
-from src.dao.base_dao import BaseDao
-from src.info.enemy_info import EnemyInfo
+from dao.base_dao import BaseDao
+from info.enemy_info import EnemyInfo
 
 
 class EnemyInfoDao(BaseDao):
@@ -17,8 +17,8 @@ class EnemyInfoDao(BaseDao):
 
     def insert(self, enemy_info):
         self.cursor.execute('insert into enemy_record (player_id, enemy_id, enemy_type_id, health, position_x, '
-                            'position_y, position_z) values (?, ?, ?, ?, ?, ?, ?,)', (self.player_id, enemy_info.enemy_id,
-                            enemy_info.enemy_type, enemy_info.health, enemy_info.position[0], enemy_info.position[1],
+                            'position_y, position_z) values (?, ?, ?, ?, ?, ?, ?)', (self.player_id, enemy_info.enemy_id,
+                            enemy_info.enemy_type_id, enemy_info.health, enemy_info.position[0], enemy_info.position[1],
                             enemy_info.position[2],))
         return self.cursor.rowcount
 
@@ -35,5 +35,5 @@ class EnemyInfoDao(BaseDao):
     def data_to_list(self, data_list):
         enemy_info_list = []
         for data in data_list:
-            enemy_info_list.append(EnemyInfo(data))
+            enemy_info_list.append(EnemyInfo(data[0],data[1],data[2],data[3],(data[4],data[5],data[6]),(data[7],data[8])))
         return enemy_info_list

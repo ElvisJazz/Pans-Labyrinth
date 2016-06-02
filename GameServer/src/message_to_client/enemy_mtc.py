@@ -3,8 +3,8 @@
 # Author: Elvis Jia
 # Date: 2016.5.27
 # ======================================================================
-from src.info.enemy_info import EnemyInfo
-from src.type.message_type import MessageType
+from info.enemy_info import EnemyInfo
+from type.message_type import MessageType
 
 
 class EnemyMessageToClient(object):

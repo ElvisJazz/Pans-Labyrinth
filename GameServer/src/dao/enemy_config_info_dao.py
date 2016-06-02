@@ -3,8 +3,9 @@
 # Author: Elvis Jia
 # Date: 2016.5.30
 # ======================================================================
-from src.dao.base_dao import BaseDao
-from src.info.enemy_info import EnemyInfo
+from dao.base_dao import BaseDao
+from info.enemy_config_info import EnemyConfigInfo
+from info.enemy_info import EnemyInfo
 
 
 class EnemyConfigInfoDao(BaseDao):
@@ -16,5 +17,5 @@ class EnemyConfigInfoDao(BaseDao):
     def data_to_list(self, data_list):
         enemy_config_info_list = []
         for data in data_list:
-            enemy_config_info_list.append(EnemyInfo(data))
+            enemy_config_info_list.append(EnemyConfigInfo(data[0], data[1], data[2], data[3], data[4], data[5]))
         return enemy_config_info_list
