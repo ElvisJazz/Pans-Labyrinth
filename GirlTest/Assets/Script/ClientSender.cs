@@ -84,19 +84,21 @@ public class ClientSocket
 						socket.Close ();
 						break;
 					} else {
-						s += Encoding.Default.GetString(buf);   
+						s += Encoding.Default.GetString(buf, 0, len); 
 						Array.Clear(buf, 0, 4096);
-						if(s.EndsWith("/$/")){
+						if(s.EndsWith(MessagePacker.END_MARK)){
 							s = s.Substring(0, s.Length-3);
 							Debug.Log("Receive message from server: "+s);   
 							AddMessageList(s);
+							s = "";
 							break;
 						}
 					}
 				}
 			} catch (Exception e) {
 				MessageTip.SetTip (e.ToString());
-				socket.Close ();
+				if(socket != null)
+					socket.Close ();
 				break;
 			}
 		}
@@ -162,15 +164,17 @@ public class ClientSocket
 	}
 
 	// Get specific message
-	public JsonData GetMessage(MessagePacker.Type type, MessagePacker.TargetType targetType){
+	public JsonData GetMessage(int squence_id){
 		lock (this) {
-			foreach (JsonData data in messageList) {
-				if ((int)data ["message_type"] == type.GetHashCode() && (int)data ["target_type"] == targetType.GetHashCode()) {
-					messageList.Remove (data);
-					return data;
+			if (messageList != null) {
+				foreach (JsonData data in messageList) {
+					if ((int)(data [MessagePacker.SEQUENCE_ID]) == squence_id) {
+						messageList.Remove (data);
+						return data;
+					}
 				}
 			}
-			return null;
 		}
+		return null;
 	}
 }

@@ -3,25 +3,36 @@
 # Author: Elvis Jia
 # Date: 2016.5.28
 # ======================================================================
+from database.dbcp_manager import DBCPManager
 from manager.game.enemy_manager import EnemyManager
 from manager.game.player_manager import PlayerManager
 from manager.game.scene_manager import SceneManager
+from manager.game.weapon_manager import WeaponManager
 
 
 class GameManager(object):
 
     def __init__(self, player_id):
-        self._player_id = player_id
-        self._scene_manager = SceneManager()
-        self._player_manager = PlayerManager()
-        self._enemy_manager = EnemyManager()
+        self.player_id = player_id
+        self.scene_manager = SceneManager(player_id)
+        self.player_manager = PlayerManager(player_id)
+        self.weapon_manager = WeaponManager(player_id)
+        self.enemy_manager = EnemyManager(player_id)
 
     def load(self):
-        self._scene_manager.load(DirectoryPath.base_scene_file_path+self._player_id);
-        self._player_manager.load(DirectoryPath.base_player_file_path+self._player_id);
-        self._enemy_manager.load(DirectoryPath.base_enemy_file_path+self._player_id);
+        self.scene_manager.load()
+        self.player_manager.load()
+        self.weapon_manager.load()
+        self.enemy_manager.load()
 
     def save(self):
-        self._scene_manager.save(DirectoryPath.base_scene_file_path+self._player_id);
-        self._player_manager.save(DirectoryPath.base_player_file_path+self._player_id);
-        self._enemy_manager.save(DirectoryPath.base_enemy_file_path+self._player_id);
+        flag = self.scene_manager.save()
+        flag |= self.player_manager.save()
+        flag |= self.weapon_manager.save()
+        flag |= self.enemy_manager.save()
+        conn = DBCPManager.get_connection(self.player_id)
+        if flag:
+            conn.commit()
+        else:
+            conn.rollback()
+        return flag

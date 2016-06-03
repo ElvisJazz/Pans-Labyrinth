@@ -4,11 +4,6 @@
 # Date: 2016.5.27
 # ======================================================================
 
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
-
 
 class WeaponInfo(object):
 

@@ -11,7 +11,13 @@ class WeaponMessageFromClient(object):
     def __init__(self):
         pass;
 
-    def set_enemy_info(self, weapon_info):
+    def get_weapon_id(self):
+        if hasattr(self, 'weapon_id'):
+            return self.weapon_id
+        else:
+            return -1
+
+    def set_weapon_info(self, weapon_info):
         if isinstance(weapon_info, WeaponInfo):
             if hasattr(self, 'weapon_id'):
                 weapon_info.weapon_id = self.weapon_id

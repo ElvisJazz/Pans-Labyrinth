@@ -4,7 +4,7 @@
 # Date: 2016.5.27
 # ======================================================================
 from info.player_info import PlayerInfo
-from type.message_type import MessageType
+from constant.message_type import MessageType
 
 
 class PlayerMessageToClient(object):

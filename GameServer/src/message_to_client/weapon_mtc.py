@@ -4,7 +4,7 @@
 # Date: 2016.5.27
 # ======================================================================
 from info.weapon_info import WeaponInfo
-from type.message_type import MessageType
+from constant.message_type import MessageType
 
 
 class WeaponMessageToClient(object):

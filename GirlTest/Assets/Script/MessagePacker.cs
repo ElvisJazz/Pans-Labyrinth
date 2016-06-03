@@ -23,10 +23,13 @@ public class MessagePacker {
 		SYSTEM = 3
 	}
 
+	public const string END_MARK = "/$/";
+	public const string SEQUENCE_ID = "sequence_id";
+
 	public static string pack(Type messageType, TargetType targetType, JsonData jsonData){
 		jsonData["message_type"] = messageType.GetHashCode();
 		jsonData["target_type"] = targetType.GetHashCode();
-		return jsonData.ToJson ();
+		return jsonData.ToJson ()+END_MARK;
 	}
 
 	public static JsonData unpack(String json){

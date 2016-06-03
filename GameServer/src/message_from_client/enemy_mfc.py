@@ -11,6 +11,12 @@ class EnemyMessageFromClient(object):
     def __init__(self):
         pass;
 
+    def get_enemy_id(self):
+        if hasattr(self, 'enemy_id'):
+            return self.enemy_id
+        else:
+            return -1
+
     def set_enemy_info(self, enemy_info):
         if isinstance(enemy_info, EnemyInfo):
             if hasattr(self, 'enemy_id'):

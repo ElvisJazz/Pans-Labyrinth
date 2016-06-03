@@ -3,21 +3,17 @@
 # Author: Elvis Jia
 # Date: 2016.5.28
 # ======================================================================
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
+
 
 class SceneManager(object):
-    def __init__(self):
+    def __init__(self, player_id):
+        self._player_id = player_id
         self._scene_info = None
 
-    def save(self, path):
+    def save(self):
         """save the information of scene"""
-        with open(path, 'wb') as f:
-            pickle.dump(self._scene_info, f)
+        pass
 
-    def load(self, path):
+    def load(self):
         """load the information of scene"""
-        with open(path, 'rb') as f:
-            self._scene_info = pickle.load(f)
+        pass

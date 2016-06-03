@@ -65,8 +65,11 @@ public class ButtonController : MonoBehaviour {
 		JsonData data = new JsonData();
 		data["name"] = username;
 		data["password"] = password;
+		int sequence_id = Mathf.RoundToInt(Time.time*1000);
+		data [MessagePacker.SEQUENCE_ID] = sequence_id;
 		String message = MessagePacker.pack (MessagePacker.Type.LOGIN, MessagePacker.TargetType.SYSTEM, data);
 		ClientSocket.GetInstance ().SendMessage (message);
+		CheckResult (sequence_id, MessagePacker.Type.LOGIN);
 	}
 
 	// RegisterOK
@@ -97,8 +100,11 @@ public class ButtonController : MonoBehaviour {
 		JsonData data = new JsonData();
 		data["name"] = username;
 		data["password"] = password1;
+		int sequence_id = Mathf.RoundToInt(Time.time*1000);
+		data [MessagePacker.SEQUENCE_ID] = sequence_id;
 		String message = MessagePacker.pack (MessagePacker.Type.REGISTER, MessagePacker.TargetType.SYSTEM, data);
 		ClientSocket.GetInstance ().SendMessage (message);
+		CheckResult (sequence_id, MessagePacker.Type.LOGIN);
 	}
 
 	// Check password
@@ -111,22 +117,25 @@ public class ButtonController : MonoBehaviour {
 	}
 
 	// Check result of login and register
-	private void CheckResult(MessagePacker.Type type, MessagePacker.TargetType targetType){
-		JsonData data = ClientSocket.GetInstance ().GetMessage (type, targetType);
+	private void CheckResult(int squence_id, MessagePacker.Type type){
+		JsonData data = null;
 		int i = 0;
-		while (data == null && i<=5) {
+		while (data == null && i<=8) {
+			data = ClientSocket.GetInstance ().GetMessage (squence_id);
 			Thread.Sleep (1000);
 			i++;
 		}
 		if (data == null) {
-			MessageTip.SetTip (type+" time out!");  
-		} else if((int)data["code"] == 1){
+			MessageTip.SetTip (type + " time out!");  
+		} else if ((bool)data ["success"]) {
 			if (type == MessagePacker.Type.REGISTER) {
 				OnClickBack ();
 				MessageTip.SetTip ("Register success, please login!");  
 			} else {
 				SceneManager.LoadScene ("Main");
 			}
+		} else if ((string)(data ["message"]) != "") {
+			MessageTip.SetTip ((string)(data ["message"]));  
 		}
 	}
 

@@ -4,7 +4,7 @@
 # Date: 2016.5.27
 # ======================================================================
 from info.enemy_info import EnemyInfo
-from type.message_type import MessageType
+from constant.message_type import MessageType
 
 
 class EnemyMessageToClient(object):

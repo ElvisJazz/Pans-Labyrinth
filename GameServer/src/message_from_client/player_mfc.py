@@ -21,7 +21,5 @@ class PlayerMessageFromClient(object):
                 player_info.health = self.health
             if hasattr(self, 'experience'):
                 player_info.experience = self.experience
-            if hasattr(self, 'weapon_list'):
-                player_info.weapon_list = self.weapon_list
         else:
             raise Exception("Instance of PlayerInfo is expected!")
