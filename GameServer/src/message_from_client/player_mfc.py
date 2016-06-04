@@ -8,9 +8,6 @@ from info.player_info import PlayerInfo
 
 class PlayerMessageFromClient(object):
 
-    def __init__(self):
-        pass;
-
     def set_player_info(self, player_info):
         if isinstance(player_info, PlayerInfo):
             if hasattr(self, 'player_id'):

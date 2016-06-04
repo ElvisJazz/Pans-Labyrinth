@@ -166,4 +166,9 @@ public class MazeSpawner : MonoBehaviour {
 		obj.transform.parent = transform;
 		obj.tag = tag;
 	}
+
+	// Get real position according to the simplified index position such as (0,2,3)
+	public Vector3 GetReaPosWithIndexPos(int[] indexPos){
+		return new Vector3(indexPos[0],indexPos[1],indexPos[2]);
+	}
 }

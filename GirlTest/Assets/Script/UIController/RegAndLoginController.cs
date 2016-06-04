@@ -6,7 +6,7 @@ using LitJson;
 using System.Threading;
 using UnityEngine.SceneManagement;
 
-public class ButtonController : MonoBehaviour {
+public class RegAndLoginController : MonoBehaviour {
 
 	// Register area
 	public GameObject RegisterArea;
@@ -104,7 +104,7 @@ public class ButtonController : MonoBehaviour {
 		data [MessagePacker.SEQUENCE_ID] = sequence_id;
 		String message = MessagePacker.pack (MessagePacker.Type.REGISTER, MessagePacker.TargetType.SYSTEM, data);
 		ClientSocket.GetInstance ().SendMessage (message);
-		CheckResult (sequence_id, MessagePacker.Type.LOGIN);
+		CheckResult (sequence_id, MessagePacker.Type.REGISTER);
 	}
 
 	// Check password

@@ -8,9 +8,6 @@ from info.enemy_info import EnemyInfo
 
 class EnemyMessageFromClient(object):
 
-    def __init__(self):
-        pass;
-
     def get_enemy_id(self):
         if hasattr(self, 'enemy_id'):
             return self.enemy_id

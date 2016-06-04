@@ -35,8 +35,6 @@ public class GoblinState : EnemyState {
 	
 	// Update is called once per frame
 	void Update () {
-		if (CompareTag ("Enemy") && !Active)
-			ActiveGoblin ();
 	}
 
 	// Make Gobin seem like a stone

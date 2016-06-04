@@ -4,8 +4,9 @@
 # Date: 2016.6.3
 # ======================================================================
 import json
+
 from constant.message_mark import MessageMark
-from message_from_client.base_message import BaseMessage
+from message_to_client.register_login_mtc import BaseMessage
 from message_from_client.enemy_mfc import EnemyMessageFromClient
 from message_from_client.player_mfc import PlayerMessageFromClient
 from message_from_client.register_login_mfc import RegisterAndLoginMessageFromClient

@@ -3,14 +3,12 @@
 # Author: Elvis Jia
 # Date: 2016.5.27
 # ======================================================================
-from constant.message_mark import MessageMark
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
-from manager.game.game_manager import GameManager
 from manager.manager_online import OnlineManager
 from manager.user.login_manager import LoginManager
 from manager.user.register_manager import RegisterManager
-from message_from_client.base_message import BaseMessage
+from message_to_client.register_login_mtc import RegisterAndLoginMessage
 from util.message_packer import MessagePacker
 
 
@@ -19,7 +17,7 @@ class Dispatcher(object):
     @classmethod
     def dispatch(cls, socket, message):
         mfc = MessagePacker.pack(message)
-        r_message = BaseMessage(mfc.message_type, mfc.target_type, mfc.sequence_id)
+        r_message = RegisterAndLoginMessage(mfc.message_type, mfc.target_type, mfc.sequence_id)
         reply = False
         # Dispatch message
         try:

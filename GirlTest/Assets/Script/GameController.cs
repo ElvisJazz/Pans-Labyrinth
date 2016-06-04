@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using LitJson;
 
 public class GameController : MonoBehaviour {
 
@@ -10,6 +11,7 @@ public class GameController : MonoBehaviour {
 			Cursor.visible = false;
 			Screen.fullScreen = true;
 		}
+
 	}
 	
 	// Update is called once per frame

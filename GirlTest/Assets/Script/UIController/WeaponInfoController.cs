@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class WeaponInfoController : MonoBehaviour {
-	[System.Serializable]
 	public struct WeaponDetail{
 		public string name;
 		public int currentAmountInGun;

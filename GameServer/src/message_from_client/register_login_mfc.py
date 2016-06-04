@@ -8,9 +8,6 @@ from info.user_info import UserInfo
 
 class RegisterAndLoginMessageFromClient(object):
 
-    def __init__(self):
-        pass;
-
     def set_user_info(self, user_info):
         if isinstance(user_info, UserInfo):
             if hasattr(self, 'name'):

@@ -8,9 +8,6 @@ from info.weapon_info import WeaponInfo
 
 class WeaponMessageFromClient(object):
 
-    def __init__(self):
-        pass;
-
     def get_weapon_id(self):
         if hasattr(self, 'weapon_id'):
             return self.weapon_id
@@ -21,7 +18,7 @@ class WeaponMessageFromClient(object):
         if isinstance(weapon_info, WeaponInfo):
             if hasattr(self, 'weapon_id'):
                 weapon_info.weapon_id = self.weapon_id
-            if hasattr(self, 'fetch'):
-                weapon_info.health = self.fetch
+            if hasattr(self, 'take'):
+                weapon_info.take = self.take
         else:
             raise Exception("Instance of WeaponInfo is expected!")

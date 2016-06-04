@@ -9,25 +9,26 @@ from constant.message_type import MessageType
 
 class EnemyMessageToClient(object):
 
-    def __init__(self, message_type, enemy_info):
+    def __init__(self, message_type, target_type, enemy_info):
         if isinstance(enemy_info, EnemyInfo):
             # Set basic information
-            self._message_type = message_type
-            self._enemy_type = enemy_info._enemy_type
-            self._enemy_id = enemy_info._enemy_id
+            self.message_type = message_type
+            self.target_type = target_type
+            self.enemy_type = enemy_info.enemy_type_id
+            self.enemy_id = enemy_info.enemy_id
             # Set message items according to different message type
             if message_type == MessageType.CREATE:
-                self._health = enemy_info._health
-                self._max_health = enemy_info._max_health
-                self._position = enemy_info._position
-                self._hurt = enemy_info._hurt
-                self._experience = enemy_info._experience
+                self.health = enemy_info.health
+                self.max_health = enemy_info.max_health
+                self.position = enemy_info.position
+                self.hurt = enemy_info.hurt
+                self.experience = enemy_info.experience
             elif message_type == MessageType.UPDATE:
                 pass
             elif message_type == MessageType.RUN:
-                self._target_position = enemy_info._target_position
+                self.target_position = enemy_info.target_position
             elif message_type == MessageType.ATTACK:
-                self._target_position = enemy_info._target_position
+                self.target_position = enemy_info.target_position
 
         else:
             raise Exception("Instance of EnemyInfo is expected!")
