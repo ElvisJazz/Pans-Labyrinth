@@ -1,15 +1,12 @@
 # ======================================================================
-# Function: Type of messages
+# Function: Type of enemy actions
 # Author: Elvis Jia
-# Date: 2016.5.27
+# Date: 2016.6.6
 # ======================================================================
 
 
-class MessageType(object):
+class EnemyActionType(object):
 
-    REGISTER = 0
-    LOGIN = 1
-    LOGOUT = 2
-    CREATE = 3
-    UPDATE = 4
-    SAVE = 7
+    IDLE = 0
+    RUN = 1
+    ATTACK = 2

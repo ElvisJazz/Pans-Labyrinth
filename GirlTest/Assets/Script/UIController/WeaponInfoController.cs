@@ -8,7 +8,14 @@ public class WeaponInfoController : MonoBehaviour {
 		public string name;
 		public int currentAmountInGun;
 		public int currentAmountInBag;
+
+		public WeaponDetail(string name, int currentAmountInGun, int currentAmountInBag){
+			this.name = name;
+			this.currentAmountInGun = currentAmountInGun;
+			this.currentAmountInBag = currentAmountInBag;
+		}
 	}
+
 	// All weapon prefabs and names
 	public string[] PrefabNames;
 	public GameObject[] Prefabs;

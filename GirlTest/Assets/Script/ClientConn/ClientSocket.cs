@@ -146,35 +146,42 @@ public class ClientSocket
 
 	// Add message list
 	private void AddMessageList(string message){
-		lock (this) {
+		if(Monitor.TryEnter (this)) {
 			messageList.Add (MessagePacker.unpack(message));
+			Monitor.Exit (this);
 		}
 	}
 
 	// Pop message list
 	public JsonData PopMessageList(){
-		lock (this) {
+		if(Monitor.TryEnter (this)) {
 			if (messageList.Count > 0) {
 				JsonData message = messageList [0];
 				messageList.RemoveAt (0);
+
+				Monitor.Exit (this);
 				return message;
 			}
+			Monitor.Exit (this);
 			return null;
 		}
+		return null;
 	}
 
 	// Get specific message
 	public JsonData GetMessage(int squence_id){
-		lock (this) {
+		if(Monitor.TryEnter (this)) {
 			if (messageList != null) {
 				foreach (JsonData data in messageList) {
 					if ((int)(data [MessagePacker.SEQUENCE_ID]) == squence_id) {
 						messageList.Remove (data);
+						Monitor.Exit (this);
 						return data;
 					}
 				}
 			}
 		}
+		Monitor.Exit (this);
 		return null;
 	}
 }

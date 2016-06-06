@@ -73,6 +73,7 @@
      <Compile Include="Assets\Role\Script\PlayerHealth.cs" />
      <Compile Include="Assets\Role\Script\PlayerMover.cs" />
      <Compile Include="Assets\Script\ClientConn\ClientSocket.cs" />
+     <Compile Include="Assets\Script\ClientConn\Dispatcher.cs" />
      <Compile Include="Assets\Script\ClientConn\MessagePacker.cs" />
      <Compile Include="Assets\Script\EnemySpawner.cs" />
      <Compile Include="Assets\Script\GameController.cs" />

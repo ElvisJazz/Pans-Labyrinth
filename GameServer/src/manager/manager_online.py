@@ -11,6 +11,8 @@ class OnlineManager(object):
 
     # socket->key, GameManager object->value
     manager_buffer = {}
+    # player_id->key, socket->value
+    socket_buffer = {}
 
     @classmethod
     def add_game_manager(cls, socket, player_id):
@@ -18,9 +20,15 @@ class OnlineManager(object):
         if cls.manager_buffer.has_key(socket):
             return
         else:
-            game_manager = GameManager(player_id)
-            game_manager.load()
-            cls.manager_buffer[socket] = game_manager
+            if cls.socket_buffer.has_key(player_id):
+                soc = cls.socket_buffer.pop(player_id)
+                game_manager = cls.manager_buffer.pop(soc)
+                cls.manager_buffer[socket] = game_manager
+                cls.socket_buffer[player_id] = socket
+            else:
+                game_manager = GameManager(player_id)
+                game_manager.load()
+                cls.manager_buffer[socket] = game_manager
 
     @classmethod
     def remove_and_save_game_manager(cls, socket, save=False):

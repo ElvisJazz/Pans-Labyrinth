@@ -18,3 +18,4 @@ class WeaponInfo(object):
         self.max_bullets_in_gun = max_bullets_in_gun
         self.max_bullets_in_bag = max_bullets_in_bag
         self.hurt = hurt
+        self.generate = False

@@ -32,6 +32,7 @@ class Dispatcher(object):
                 r_message.success = True if user_info is not None else False
                 if r_message.success:
                     OnlineManager.add_game_manager(socket, user_info.player_id)
+
             # Update
             elif mfc.message_type == MessageType.UPDATE:
                 game_manager = (OnlineManager.get_game_manager(socket))
