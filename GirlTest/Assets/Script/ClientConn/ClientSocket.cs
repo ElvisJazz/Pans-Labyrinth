@@ -6,14 +6,13 @@ using System.Threading;
 using UnityEngine;
 using System.Text;
 using System.Collections;
-using LitJson;
 
 public class ClientSocket
 {
 	// Socket
 	private Socket socket;
 	// Message container
-	public List<JsonData> messageList;
+	public List<string> messageList;
 	// Singleton instance
 	private static ClientSocket instance;
 	// Connect success
@@ -58,7 +57,7 @@ public class ClientSocket
 			MessageTip.SetTip ("Failed to connect server!");  
 		} else{
 			// Start thread
-			messageList = new List<JsonData>();
+			messageList = new List<string>();
 			Thread thread = new Thread (new ThreadStart (ReceiveMessage));
 			thread.IsBackground = true;
 			thread.Start ();
@@ -86,8 +85,8 @@ public class ClientSocket
 					} else {
 						s += Encoding.Default.GetString(buf, 0, len); 
 						Array.Clear(buf, 0, 4096);
-						if(s.EndsWith(MessagePacker.END_MARK)){
-							s = s.Substring(0, s.Length-3);
+						if(s.EndsWith(BaseMessage.END_MARK)){
+							s = s.Substring(0, s.Length-BaseMessage.END_MARK.Length);
 							Debug.Log("Receive message from server: "+s);   
 							AddMessageList(s);
 							s = "";
@@ -147,18 +146,17 @@ public class ClientSocket
 	// Add message list
 	private void AddMessageList(string message){
 		if(Monitor.TryEnter (this)) {
-			messageList.Add (MessagePacker.unpack(message));
+			messageList.Add (message);
 			Monitor.Exit (this);
 		}
 	}
 
 	// Pop message list
-	public JsonData PopMessageList(){
+	public string PopMessageList(){
 		if(Monitor.TryEnter (this)) {
 			if (messageList.Count > 0) {
-				JsonData message = messageList [0];
+				string message = messageList [0];
 				messageList.RemoveAt (0);
-
 				Monitor.Exit (this);
 				return message;
 			}
@@ -168,15 +166,19 @@ public class ClientSocket
 		return null;
 	}
 
-	// Get specific message
-	public JsonData GetMessage(int squence_id){
+	// Get register and login message
+	public RegisterAndLoginMessageFromServer GetRegisterAndLoginMessage(int squence_id){
 		if(Monitor.TryEnter (this)) {
 			if (messageList != null) {
-				foreach (JsonData data in messageList) {
-					if ((int)(data [MessagePacker.SEQUENCE_ID]) == squence_id) {
-						messageList.Remove (data);
-						Monitor.Exit (this);
-						return data;
+				foreach (string message in messageList) {
+					BaseMessage bm = JsonUtility.FromJson<BaseMessage> (message);
+					if (bm.message_type==MessageConstant.Type.REGISTER.GetHashCode() || bm.message_type==MessageConstant.Type.LOGIN.GetHashCode()) {
+						RegisterAndLoginMessageFromServer ralbm = JsonUtility.FromJson<RegisterAndLoginMessageFromServer> (message);
+						if (ralbm.sequence_id == squence_id) {
+							messageList.Remove (message);
+							Monitor.Exit (this);
+							return ralbm;
+						}
 					}
 				}
 			}

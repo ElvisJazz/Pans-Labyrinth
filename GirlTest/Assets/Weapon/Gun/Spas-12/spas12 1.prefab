@@ -96,7 +96,7 @@ GameObject:
   - 65: {fileID: 6557000}
   - 114: {fileID: 11405436}
   m_Layer: 9
-  m_Name: spas-12 1
+  m_Name: spas12 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -712,7 +712,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponDetail:
-    name: Spas-12
+    name: Spas12
     currentAmountInGun: 12
     currentAmountInBag: 60
 --- !u!1001 &100100000

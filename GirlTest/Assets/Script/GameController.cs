@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using LitJson;
 
 public class GameController : MonoBehaviour {
 	// Client socket
@@ -14,9 +13,6 @@ public class GameController : MonoBehaviour {
 			Screen.fullScreen = true;
 			socket = ClientSocket.GetInstance ();
 		}
-		//JsonData data = JsonMapper.ToObject ("{\"1\" : [0,1,2]}");
-		//Debug.Log(data["1"]);
-
 	}
 	
 	// Update is called once per frame
@@ -31,9 +27,9 @@ public class GameController : MonoBehaviour {
 
 	// Check whether has server message to read
 	void ReadServerMessage(){
-		JsonData data = socket.PopMessageList ();
-		if (data != null) {
-			Dispatcher.dispatcher (data);
+		string message = socket.PopMessageList ();
+		if (message != null) {
+			Dispatcher.dispatcher (message);
 		}
 	}
 

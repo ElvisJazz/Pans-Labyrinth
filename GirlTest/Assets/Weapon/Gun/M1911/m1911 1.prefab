@@ -1793,7 +1793,7 @@ MonoBehaviour:
   WeaponDetail:
     name: M1911
     currentAmountInGun: 20
-    currentAmountInBag: 120
+    currentAmountInBag: 100
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

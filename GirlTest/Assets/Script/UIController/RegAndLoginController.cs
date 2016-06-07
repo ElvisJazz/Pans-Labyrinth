@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using System.Collections;
 using System;
-using LitJson;
 using System.Threading;
 using UnityEngine.SceneManagement;
 
@@ -62,14 +61,7 @@ public class RegAndLoginController : MonoBehaviour {
 		if (!nextOpFlag)
 			return;
 		// Login option
-		JsonData data = new JsonData();
-		data["name"] = username;
-		data["password"] = password;
-		int sequence_id = Mathf.RoundToInt(Time.time*1000);
-		data [MessagePacker.SEQUENCE_ID] = sequence_id;
-		String message = MessagePacker.pack (MessagePacker.Type.LOGIN, MessagePacker.TargetType.SYSTEM, data);
-		ClientSocket.GetInstance ().SendMessage (message);
-		CheckResult (sequence_id, MessagePacker.Type.LOGIN);
+		SendRegiserAndLoginMessage(MessageConstant.Type.LOGIN, username, password);
 	}
 
 	// RegisterOK
@@ -97,14 +89,7 @@ public class RegAndLoginController : MonoBehaviour {
 		if (!nextOpFlag)
 			return;
 		// Register option
-		JsonData data = new JsonData();
-		data["name"] = username;
-		data["password"] = password1;
-		int sequence_id = Mathf.RoundToInt(Time.time*1000);
-		data [MessagePacker.SEQUENCE_ID] = sequence_id;
-		String message = MessagePacker.pack (MessagePacker.Type.REGISTER, MessagePacker.TargetType.SYSTEM, data);
-		ClientSocket.GetInstance ().SendMessage (message);
-		CheckResult (sequence_id, MessagePacker.Type.REGISTER);
+		SendRegiserAndLoginMessage(MessageConstant.Type.REGISTER, username, password1);
 	}
 
 	// Check password
@@ -117,26 +102,40 @@ public class RegAndLoginController : MonoBehaviour {
 	}
 
 	// Check result of login and register
-	private void CheckResult(int squence_id, MessagePacker.Type type){
-		JsonData data = null;
+	private void CheckResult(int squence_id, MessageConstant.Type type){
+		RegisterAndLoginMessageFromServer rl_message = null;
 		int i = 0;
-		while (data == null && i<=8) {
-			data = ClientSocket.GetInstance ().GetMessage (squence_id);
+		while (rl_message == null && i<=8) {
+			rl_message = ClientSocket.GetInstance ().GetRegisterAndLoginMessage (squence_id);
 			Thread.Sleep (1000);
 			i++;
 		}
-		if (data == null) {
+		if (rl_message == null) {
 			MessageTip.SetTip (type + " time out!");  
-		} else if ((bool)data ["success"]) {
-			if (type == MessagePacker.Type.REGISTER) {
+		} else if (rl_message.success) {
+			if (type == MessageConstant.Type.REGISTER) {
 				OnClickBack ();
 				MessageTip.SetTip ("Register success, please login!");  
 			} else {
 				SceneManager.LoadScene ("Main");
 			}
-		} else if ((string)(data ["message"]) != "") {
-			MessageTip.SetTip ((string)(data ["message"]));  
+		} else if (rl_message.message != "") {
+			MessageTip.SetTip (rl_message.message);  
 		}
+	}
+
+	// Send register and login message
+	private void SendRegiserAndLoginMessage(MessageConstant.Type type, string username, string password){
+		RegisterAndLoginMessageToServer data = new RegisterAndLoginMessageToServer();
+		data.target_type = MessageConstant.TargetType.SYSTEM.GetHashCode ();
+		data.message_type = type.GetHashCode ();
+		data.name = username;
+		data.password = password;
+		int sequence_id = Mathf.RoundToInt(Time.time*1000);
+		data.sequence_id = sequence_id;
+		String message = JsonUtility.ToJson (data);
+		ClientSocket.GetInstance ().SendMessage (message+BaseMessage.END_MARK);
+		CheckResult (sequence_id, type);
 	}
 
 	// Clear tip

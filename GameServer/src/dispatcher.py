@@ -32,6 +32,7 @@ class Dispatcher(object):
                 r_message.success = True if user_info is not None else False
                 if r_message.success:
                     OnlineManager.add_game_manager(socket, user_info.player_id)
+                    OnlineManager.get_game_manager(socket).weapon_manager.generate_default_weapon();
 
             # Update
             elif mfc.message_type == MessageType.UPDATE:

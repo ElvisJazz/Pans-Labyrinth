@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class WeaponInfoController : MonoBehaviour {
+	[System.Serializable]
 	public struct WeaponDetail{
 		public string name;
 		public int currentAmountInGun;
@@ -15,7 +16,6 @@ public class WeaponInfoController : MonoBehaviour {
 			this.currentAmountInBag = currentAmountInBag;
 		}
 	}
-
 	// All weapon prefabs and names
 	public string[] PrefabNames;
 	public GameObject[] Prefabs;

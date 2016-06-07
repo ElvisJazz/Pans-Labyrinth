@@ -29,6 +29,7 @@ class OnlineManager(object):
                 game_manager = GameManager(player_id)
                 game_manager.load()
                 cls.manager_buffer[socket] = game_manager
+                cls.socket_buffer[player_id] = socket
 
     @classmethod
     def remove_and_save_game_manager(cls, socket, save=False):

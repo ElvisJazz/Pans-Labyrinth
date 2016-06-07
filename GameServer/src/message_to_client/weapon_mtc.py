@@ -16,6 +16,7 @@ class WeaponMessageToClient(object):
             self.target_type = target_type
             # Set message items according to different message type
             if message_type == MessageType.CREATE:
+                self.name = weapon_info.name
                 self.type_id = weapon_info.weapon_type_id
                 self.position = weapon_info.weapon_position
                 self.take = weapon_info.take

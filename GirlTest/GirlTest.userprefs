@@ -1,17 +1,15 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Maze\Script\TreeMazeGenerator.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\WeaponSpawner.cs">
     <Files>
-      <File FileName="Assets\Maze\Script\BasicMazeGenerator.cs" Line="27" Column="33" />
-      <File FileName="Assets\Script\MessagePacker.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\GameController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\ButtonController.cs" Line="107" Column="53" />
-      <File FileName="Assets\Script\ClientSender.cs" Line="1" Column="1" />
-      <File FileName="Assets\Weapon\Script\BulletEffect.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\MessageTip.cs" Line="1" Column="1" />
-      <File FileName="Assets\FightingUnityChan_FreeAsset\FightingUnityChan_FreeAsset\Scripts\IdleChanger.cs" Line="1" Column="1" />
-      <File FileName="Assets\Maze\Script\MazeCell.cs" Line="14" Column="1" />
-      <File FileName="Assets\Maze\Script\TreeMazeGenerator.cs" Line="1" Column="1" />
+      <File FileName="Assets\Script\Message\FromServer\EnemyMFS.cs" Line="20" Column="33" />
+      <File FileName="Assets\Script\ClientConn\ClientSocket.cs" Line="107" Column="39" />
+      <File FileName="Assets\Script\Message\FromServer\RegisterAndLoginMFS.cs" Line="10" Column="25" />
+      <File FileName="Assets\Script\ClientConn\Dispatcher.cs" Line="41" Column="24" />
+      <File FileName="Assets\Script\UIController\RegAndLoginController.cs" Line="130" Column="15" />
+      <File FileName="Assets\Script\Message\ToServer\RegisterAndLoginMTS.cs" Line="9" Column="16" />
+      <File FileName="Assets\Script\GameController.cs" Line="29" Column="27" />
+      <File FileName="Assets\Script\WeaponSpawner.cs" Line="16" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

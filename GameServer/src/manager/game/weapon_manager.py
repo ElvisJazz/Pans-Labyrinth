@@ -6,11 +6,10 @@
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
 from database.bl.weapon_info_bl import WeaponInfoBL
-from database.dbcp_manager import DBCPManager
-from dispatcher import Dispatcher
-from manager.manager_online import OnlineManager
 from message_from_client.weapon_mfc import WeaponMessageFromClient
 from message_to_client.weapon_mtc import WeaponMessageToClient
+import manager.manager_online
+import dispatcher
 
 
 class WeaponManager(object):
@@ -37,26 +36,20 @@ class WeaponManager(object):
                 weapon_mfc.set_weapon_info(self._weapon_dict[id])
 
     def generate_default_weapon(self):
-        """ generate weapons when player login """
-        taken_weapon_list = []
-        if self._weapon_dict != {}:
-            socket = OnlineManager.socket_buffer[self._player_id]
+        """ generate weapons when player firstly login """
+        if len(self._weapon_dict) > 0:
+            socket = manager.manager_online.OnlineManager.socket_buffer[self._player_id]
             for info in self._weapon_dict.values():
-                if info.take == 1:
-                    taken_weapon_list.append(info)
-            message = ""
-            if taken_weapon_list is []:
-                message = WeaponMessageToClient(MessageType.CREATE, MessageTargetType.WEAPON, self._weapon_dict.values()[0])
-                self._weapon_dict.values()[0].generate = True
-            else:
-                message = WeaponMessageToClient(MessageType.CREATE, MessageTargetType.WEAPON, taken_weapon_list[0])
-            Dispatcher.send(socket, message)
+                if info.default == 1:
+                    message = WeaponMessageToClient(MessageType.CREATE, MessageTargetType.WEAPON, info)
+                    info.generate = True
+                    dispatcher.Dispatcher.send(socket, message)
 
     def generate_weapon(self):
         """ generate weapons when game is running """
         untaken_weapon_list = []
         if self._weapon_dict != {}:
-            socket = OnlineManager.socket_buffer[self._player_id]
+            socket = manager.manager_online.OnlineManager.socket_buffer[self._player_id]
             for info in self._weapon_dict.values():
                 if info.take == 0 and not info.generat:
                     untaken_weapon_list.append(info)
@@ -64,4 +57,4 @@ class WeaponManager(object):
             if untaken_weapon_list is not []:
                 message = WeaponMessageToClient(MessageType.CREATE, MessageTargetType.WEAPON, untaken_weapon_list[0])
                 untaken_weapon_list[0].generate = True
-                Dispatcher.send(socket, message)
+                dispatcher.Dispatcher.send(socket, message)

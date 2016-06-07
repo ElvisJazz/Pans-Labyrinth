@@ -6,7 +6,6 @@
 import json
 
 from constant.message_mark import MessageMark
-from message_to_client.register_login_mtc import BaseMessage
 from message_from_client.enemy_mfc import EnemyMessageFromClient
 from message_from_client.player_mfc import PlayerMessageFromClient
 from message_from_client.register_login_mfc import RegisterAndLoginMessageFromClient
@@ -19,7 +18,7 @@ class MessagePacker(object):
     @classmethod
     def pack(cls, json_str):
         dic = json.loads(json_str)
-        mfc = BaseMessage()
+        mfc = None
         # System message from client
         if dic['target_type'] == MessageTargetType.SYSTEM:
             mfc = RegisterAndLoginMessageFromClient()

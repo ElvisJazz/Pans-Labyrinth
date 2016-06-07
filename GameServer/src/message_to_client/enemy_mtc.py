@@ -23,12 +23,10 @@ class EnemyMessageToClient(object):
                 self.position = enemy_info.position
                 self.hurt = enemy_info.hurt
                 self.experience = enemy_info.experience
+                self.target_position = enemy_info.target_position
+                self.action_type = enemy_info.action_type
             elif message_type == MessageType.UPDATE:
-                pass
-            elif message_type == MessageType.RUN:
                 self.target_position = enemy_info.target_position
-            elif message_type == MessageType.ATTACK:
-                self.target_position = enemy_info.target_position
-
+                self.action_type = enemy_info.action_type
         else:
             raise Exception("Instance of EnemyInfo is expected!")
