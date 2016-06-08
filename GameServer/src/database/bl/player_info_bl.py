@@ -28,8 +28,8 @@ class PlayerInfoBL(BaseBL):
         #self.dao.commit()
         return rc > 0
 
-    # Update player
-    def delete_list(self, player_info):
+    # Delete player
+    def delete_player(self, player_info):
         rc = self.dao.delete(player_info)
         #self.dao.commit()
         return rc > 0

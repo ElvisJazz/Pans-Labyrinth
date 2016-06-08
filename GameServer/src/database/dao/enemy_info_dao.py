@@ -30,7 +30,7 @@ class EnemyInfoDao(BaseDao):
 
     def update(self, enemy_info):
         cursor = self.conn.cursor()
-        cursor.execute('update enemy_record set health=?, position_x=?, position_y=?, position_z=?) where '
+        cursor.execute('update enemy_record set health=?, position_x=?, position_y=?, position_z=? where '
                             'player_id=? and enemy_id=?', (enemy_info.health, enemy_info.position[0], enemy_info.position[1],
                             enemy_info.position[2], self.player_id, enemy_info.enemy_id,))
         r = cursor.rowcount

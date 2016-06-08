@@ -11,3 +11,4 @@ class MessageTargetType(object):
     ENEMY = 1
     WEAPON = 2
     SYSTEM = 3
+    SCENE = 4

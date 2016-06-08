@@ -12,7 +12,7 @@ class WeaponInfoDao(BaseDao):
     def get_dict_by_player_id(self):
         cursor = self.conn.cursor()
         cursor.execute('select a.weapon_id, b.type_id, b.weapon_type, a.take, a.current_bullets_in_gun, a.current_bullets_in_bag,'
-                            'b.max_bullets_in_gun, b.max_bullets_in_bag, a.position_x, a.position_y, a.position_z, b.hurt, b.default '
+                            'b.max_bullets_in_gun, b.max_bullets_in_bag, a.position_x, a.position_y, a.position_z, b.hurt, b.default0 '
                             'from weapon_record a, weapon_type_config b where a.player_id = ? and a.weapon_type_id=b.type_id',
                             (self.player_id,))
         d = self.data_to_dict(cursor.fetchall())
@@ -31,7 +31,7 @@ class WeaponInfoDao(BaseDao):
     def update(self, weapon_info):
         cursor = self.conn.cursor()
         cursor.execute('update weapon_record set take=?, current_bullets_in_gun=?, current_bullets_in_bag=?,'
-                            'position_x=?, position_y=?, position_z=?) where player_id=? and weapon_id=?',
+                            'position_x=?, position_y=?, position_z=? where player_id=? and weapon_id=?',
                             (weapon_info.take, weapon_info.current_bullets_in_gun, weapon_info.current_bullets_in_bag,
                              weapon_info.position[0], weapon_info.position[1],weapon_info.position[2],self.player_id, weapon_info.weapon_id,))
         r = cursor.rowcount

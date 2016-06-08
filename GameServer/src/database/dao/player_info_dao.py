@@ -30,7 +30,7 @@ class PlayerInfoDao(BaseDao):
     def update(self, player_info):
         cursor = self.conn.cursor()
         cursor.execute('update player_record set player_type_id=?, health=?, experience=?, position_x=?, position_y=?,'
-                            'position_z=?) where player_id=?', (player_info.type_id, player_info.health, player_info.experience,
+                            'position_z=? where player_id=?', (player_info.type_id, player_info.health, player_info.experience,
                              player_info.position[0], player_info.position[1], player_info.position[2], player_info.player_id,))
         r = cursor.rowcount
         cursor.close()

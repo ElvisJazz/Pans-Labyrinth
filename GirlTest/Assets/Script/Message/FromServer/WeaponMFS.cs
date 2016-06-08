@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
-[System.Serializable]
-public class WeaponMessageFromServer : BaseMessage {
+[Serializable]
+public struct WeaponInfo{
+	// Weapon id
+	public int weapon_id;
 	// Type id
 	public int type_id;
 	// Position
@@ -18,4 +21,9 @@ public class WeaponMessageFromServer : BaseMessage {
 	public int max_current_bullets_in_gun;
 	// Max current bullets in bag
 	public int max_current_bullets_in_bag;
+}
+
+[Serializable]
+public class WeaponMessageFromServer : BaseMessage {
+	public WeaponInfo[] weapon_info_list;
 }

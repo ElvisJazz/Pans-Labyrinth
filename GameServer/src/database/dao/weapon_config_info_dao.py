@@ -20,5 +20,5 @@ class WeaponConfigInfoDao(BaseDao):
         weapon_config_info_list = []
         if data_list is not None:
             for data in data_list:
-                weapon_config_info_list.append(WeaponConfigInfo(data[0],data[1],data[2],data[3],data[4],data[5]))
+                weapon_config_info_list.append(WeaponConfigInfo(data[0],data[1],data[2],data[3],data[4],data[5],data[6]))
         return weapon_config_info_list

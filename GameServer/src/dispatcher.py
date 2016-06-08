@@ -3,6 +3,7 @@
 # Author: Elvis Jia
 # Date: 2016.5.27
 # ======================================================================
+import traceback
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
 from manager.manager_online import OnlineManager
@@ -32,7 +33,11 @@ class Dispatcher(object):
                 r_message.success = True if user_info is not None else False
                 if r_message.success:
                     OnlineManager.add_game_manager(socket, user_info.player_id)
-                    OnlineManager.get_game_manager(socket).weapon_manager.generate_default_weapon();
+                    game_manager = OnlineManager.get_game_manager(socket)
+                    game_manager.weapon_manager.generate_default_weapon()
+                    game_manager.scene_manager.generate()
+                    game_manager.player_manager.generate()
+                    game_manager.enemy_manager.generate()
 
             # Update
             elif mfc.message_type == MessageType.UPDATE:
@@ -54,6 +59,7 @@ class Dispatcher(object):
 
         except Exception, e:
             r_message.message = str(e)
+            traceback.print_exc()
         # Send reply message
         if reply:
             cls.send(socket, r_message)

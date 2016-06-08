@@ -7,17 +7,7 @@ using UnityEngine;
 using System.Collections;
 
 public class MazeSpawner : MonoBehaviour {
-	public enum MazeGenerationAlgorithm{
-		PureRecursive,
-		RecursiveTree,
-		RandomTree,
-		OldestTree,
-		RecursiveDivision,
-	}
-
-	public MazeGenerationAlgorithm Algorithm = MazeGenerationAlgorithm.PureRecursive;
-	public bool FullRandom = false;
-	public int RandomSeed = 12345;
+	
 	public GameObject Floor = null;
 	public GameObject Wall = null;
 	public GameObject Pillar = null;
@@ -28,36 +18,16 @@ public class MazeSpawner : MonoBehaviour {
 	public float CellWidth = 5;
 	public float CellHeight = 5;
 	public bool AddGaps = true;
-	public GameObject GoalPrefab = null;
-
-	BasicMazeGenerator mMazeGenerator = null;
-	GameObject enemySpawner = null;
-
-	void Start () {
-		enemySpawner = GameObject.Find ("EnemySpawner");
-
-		if (!FullRandom) {
-			Random.seed = RandomSeed;
+	public GameObject EnemySpawnerPrefab = null;
+	private MazeCell[,] mazeArray;
+	public MazeCell[,] MazeArray {
+		set{
+			mazeArray = value;
 		}
-		switch (Algorithm) {
-		case MazeGenerationAlgorithm.PureRecursive:
-			mMazeGenerator = new RecursiveMazeGenerator (Rows, Columns);
-			break;
-		case MazeGenerationAlgorithm.RecursiveTree:
-			mMazeGenerator = new RecursiveTreeMazeGenerator (Rows, Columns);
-			break;
-		case MazeGenerationAlgorithm.RandomTree:
-			mMazeGenerator = new RandomTreeMazeGenerator (Rows, Columns);
-			break;
-		case MazeGenerationAlgorithm.OldestTree:
-			mMazeGenerator = new OldestTreeMazeGenerator (Rows, Columns);
-			break;
-		case MazeGenerationAlgorithm.RecursiveDivision:
-			mMazeGenerator = new DivisionMazeGenerator (Rows, Columns);
-			break;
-		}
-		mMazeGenerator.GenerateMaze ();
+	}
+	
 
+	public void Build () {
 		// Build walls
 		BuildWalls();
 
@@ -72,29 +42,29 @@ public class MazeSpawner : MonoBehaviour {
 			for(int column = 0; column < Columns; column++){
 				float x = GetXPos(column);
 				float z = GetZPos(row);
-				MazeCell cell = mMazeGenerator.GetMazeCell(row,column);
+				MazeCell cell = mazeArray[row,column];
 				GameObject wall;
 				wall = Instantiate(Floor,new Vector3(x,0,z), Quaternion.Euler(0,0,0)) as GameObject;
 				SetTransformAndTag(wall);
 
-				if(cell.WallRight){
+				if(cell.wallRight){
 					wall = Instantiate(Wall,new Vector3(x+CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,90,0)) as GameObject;// right
 					SetTransformAndTag(wall);
 				}
-				if(cell.WallFront){
+				if(cell.wallFront){
 					wall = Instantiate(Wall,new Vector3(x,0,z+CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,0,0)) as GameObject;// front
 					SetTransformAndTag(wall);
 				}
-				if(cell.WallLeft){
+				if(cell.wallLeft){
 					wall = Instantiate(Wall,new Vector3(x-CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,270,0)) as GameObject;// left
 					SetTransformAndTag(wall);
 				}
-				if(cell.WallBack){
+				if(cell.wallBack){
 					wall = Instantiate(Wall,new Vector3(x,0,z-CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,180,0)) as GameObject;// back
 					SetTransformAndTag(wall);
 				}
-				if(cell.IsGoal && GoalPrefab != null){
-					wall = Instantiate(GoalPrefab,new Vector3(x,1,z), Quaternion.Euler(0,0,0)) as GameObject;
+				if(cell.isEnemySpawner && EnemySpawnerPrefab != null){
+					wall = Instantiate(EnemySpawnerPrefab,new Vector3(x,1,z), Quaternion.Euler(0,0,0)) as GameObject;
 					SetTransformAndTag(wall);
 				}
 			}
@@ -133,7 +103,7 @@ public class MazeSpawner : MonoBehaviour {
 					SetTransformAndTag(pillar);
 
 					// Create goblins
-					GameObject goblin = Instantiate(Goblin, new Vector3(x-CellWidth/2, GoblinPosHeight, z-CellHeight/2),Quaternion.identity) as GameObject;
+					/*GameObject goblin = Instantiate(Goblin, new Vector3(x-CellWidth/2, GoblinPosHeight, z-CellHeight/2),Quaternion.identity) as GameObject;
 					// Set forward
 					if(row % 2 == 0){
 						goblin.transform.forward = pillar.transform.forward;
@@ -144,7 +114,7 @@ public class MazeSpawner : MonoBehaviour {
 
 					if(enemySpawner != null){
 						goblin.transform.parent = enemySpawner.transform;
-					}
+					}*/
 
 				}
 			}
@@ -169,6 +139,6 @@ public class MazeSpawner : MonoBehaviour {
 
 	// Get real position according to the simplified index position such as (0,2,3)
 	public Vector3 GetReaPosWithIndexPos(int[] indexPos){
-		return new Vector3(indexPos[0],indexPos[1],indexPos[2]);
+		return new Vector3(indexPos[0]*CellWidth,indexPos[1],indexPos[2]*CellHeight);
 	}
 }

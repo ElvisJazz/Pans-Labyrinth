@@ -7,9 +7,8 @@ public class PlayerHealth : MonoBehaviour {
 	// Player's health
 	int health = 100;
 	public int Health {
-		get{
-			return health;
-		}
+		get;
+		set;
 	}
 	// Damage image
 	public Image DamageImage = null;

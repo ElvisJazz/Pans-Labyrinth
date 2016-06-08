@@ -14,6 +14,7 @@
 		PLAYER = 0,
 		ENEMY = 1,
 		WEAPON = 2,
-		SYSTEM = 3
+		SYSTEM = 3,
+		SCENE = 4
 	} 
 }

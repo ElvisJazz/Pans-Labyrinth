@@ -67,39 +67,39 @@ public class ClientSocket
 	// Receive message from server
 	private void ReceiveMessage(){
 		string s = "";
-		while (true) {
-			if (!socket.Connected) {
-				// Failed to connect server
-				MessageTip.SetTip ("Failed to connect server!");  
-				socket.Close ();
-				break;
-			}
-			try {
-				Byte[] buf = new byte[4096];
-				int len = 0;
-				// Wait to receive message
-				while((len = socket.Receive (buf))>0){
-					if (len <= 0) {
-						socket.Close ();
-						break;
-					} else {
-						s += Encoding.Default.GetString(buf, 0, len); 
-						Array.Clear(buf, 0, 4096);
-						if(s.EndsWith(BaseMessage.END_MARK)){
-							s = s.Substring(0, s.Length-BaseMessage.END_MARK.Length);
-							Debug.Log("Receive message from server: "+s);   
-							AddMessageList(s);
-							s = "";
-							break;
-						}
+		if (!socket.Connected) {
+			// Failed to connect server
+			MessageTip.SetTip ("Failed to connect server!");  
+			socket.Close ();
+			return;
+		}
+		try {
+			Byte[] buf = new byte[4096];
+			int len = 0;
+			int index = 0;
+			string tmp;
+			// Wait to receive message
+			while((len = socket.Receive (buf))>0){
+				if (len <= 0) {
+					socket.Close ();
+					break;
+				} else {
+					s += Encoding.Default.GetString(buf, 0, len); 
+					Array.Clear(buf, 0, 4096);
+					while(s.Contains(BaseMessage.END_MARK)){
+						index = s.IndexOf(BaseMessage.END_MARK);
+						tmp = s.Substring(0, index);
+						Debug.Log("Receive message from server: "+tmp);  
+						AddMessageList(tmp);
+						s = s.Substring(index+BaseMessage.END_MARK.Length);
 					}
 				}
-			} catch (Exception e) {
-				MessageTip.SetTip (e.ToString());
-				if(socket != null)
-					socket.Close ();
-				break;
 			}
+		} catch (Exception e) {
+			MessageTip.SetTip (e.ToString());
+			if(socket != null)
+				socket.Close ();
+			return;
 		}
 	}
 

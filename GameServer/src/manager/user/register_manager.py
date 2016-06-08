@@ -3,8 +3,11 @@
 # Author: Elvis Jia
 # Date: 2016.5.28
 # ======================================================================
+import json
 from database.bl.enemy_config_info_bl import EnemyConfigInfoBL
 from database.bl.enemy_info_bl import EnemyInfoBL
+from database.bl.maze_config_info_bl import MazeConfigInfoBL
+from database.bl.maze_info_bl import MazeInfoBL
 from database.bl.player_config_info_bl import PlayerConfigInfoBL
 from database.bl.player_info_bl import PlayerInfoBL
 from database.bl.user_info_bl import UserInfoBL
@@ -12,10 +15,13 @@ from database.bl.weapon_config_info_bl import WeaponConfigInfoBL
 from database.bl.weapon_info_bl import WeaponInfoBL
 from database.dbcp_manager import DBCPManager
 from info.enemy_info import EnemyInfo
+from info.maze_info import MazeInfo
 from info.player_info import PlayerInfo
 from info.weapon_info import WeaponInfo
 from message_from_client.register_login_mfc import RegisterAndLoginMessageFromClient
 from info.user_info import UserInfo
+from util.maze_generator import MazeGenerator
+
 
 class RegisterManager(object):
 
@@ -63,7 +69,7 @@ class RegisterManager(object):
         player_config = player_config_bl.get_by_id(0)
         # Create player info record
         player_info = PlayerInfo(player_id, player_config.type_id, player_config.level, (0,0,0), player_config.max_health,
-                                 player_config.max_health, player_config.max_experience, player_config.max_experience)
+                                 player_config.max_health, 0, player_config.max_experience)
         player_info_bl = PlayerInfoBL(player_id)
         player_info_bl.set_conn(conn)
         return player_info_bl.add_player(player_info)
@@ -77,8 +83,8 @@ class RegisterManager(object):
         # Create weapon list according to config list
         weapon_list = []
         for config in weapon_config_list:
-            weapon = WeaponInfo(0, config.type_id,False, config.max_bullets_in_gun, config.max_bullets_in_bag,
-                                config.max_bullets_in_gun, config.max_bullets_in_bag,(0,0,0), config.hurt)
+            weapon = WeaponInfo(0, config.type_id, config.weapon_type, False, config.max_bullets_in_gun, config.max_bullets_in_bag,
+                                config.max_bullets_in_gun, config.max_bullets_in_bag,(0,0,0), config.hurt, config.default)
             weapon_list.append(weapon)
         weapon_info_bl = WeaponInfoBL(player_id, conn)
         return weapon_info_bl.add_list(weapon_list)
@@ -103,4 +109,20 @@ class RegisterManager(object):
 
     @classmethod
     def add_scene_info(cls, player_id, conn):
-        return True
+        # Get maze config
+        maze_config_bl = MazeConfigInfoBL(player_id)
+        maze_config_bl.set_conn(conn)
+        maze_config_list = maze_config_bl.get_list()
+        # Create maze and save record
+        for config in maze_config_list:
+            if config.default == 1:
+                tmp_array = MazeGenerator(config.row, config.column).generate_maze()
+                maze_array = []
+                for i in range(0, config.row):
+                    for j in range(0, config.column):
+                        maze_array.append(tmp_array[i][j])
+                maze_json = json.dumps(maze_array, default=lambda obj: obj.__dict__)
+                maze = MazeInfo(0, config.type_id, config.row, config.column, maze_json)
+                maze_info_bl = MazeInfoBL(player_id)
+                maze_info_bl.set_conn(conn)
+                return maze_info_bl.add_maze(maze)

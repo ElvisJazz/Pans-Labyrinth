@@ -37,13 +37,14 @@ class WeaponManager(object):
 
     def generate_default_weapon(self):
         """ generate weapons when player firstly login """
+        taken_weapon_list = []
         if len(self._weapon_dict) > 0:
             socket = manager.manager_online.OnlineManager.socket_buffer[self._player_id]
             for info in self._weapon_dict.values():
-                if info.default == 1:
-                    message = WeaponMessageToClient(MessageType.CREATE, MessageTargetType.WEAPON, info)
-                    info.generate = True
-                    dispatcher.Dispatcher.send(socket, message)
+                if info.take == 1:
+                    taken_weapon_list.append(info)
+            message = WeaponMessageToClient(MessageType.CREATE, MessageTargetType.WEAPON, taken_weapon_list)
+            dispatcher.Dispatcher.send(socket, message)
 
     def generate_weapon(self):
         """ generate weapons when game is running """

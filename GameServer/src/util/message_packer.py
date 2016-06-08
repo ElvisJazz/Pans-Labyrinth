@@ -36,6 +36,6 @@ class MessagePacker(object):
 
     @classmethod
     def unpack(cls, message):
-        json_str = json.dumps(message.__dict__)
+        json_str = json.dumps(message, default=lambda obj: obj.__dict__)
         json_str += MessageMark.END_MARK
         return json_str

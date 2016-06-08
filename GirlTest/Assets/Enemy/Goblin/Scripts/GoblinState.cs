@@ -14,7 +14,7 @@ public class GoblinState : EnemyState {
 	public Material StoneMaterial;
 
 	void Start(){
-		Active = false;
+		Active = true;
 	}
 
 	// Use this for initialization

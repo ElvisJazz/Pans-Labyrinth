@@ -16,7 +16,7 @@ class PlayerMessageToClient(object):
             self.target_type = target_type
             self.player_id = player_info.player_id
             # Set message items according to different message type
-            if message_type == MessageType.CREATE:
+            if message_type == MessageType.UPDATE:
                 self.health = player_info.health
                 self.max_health = player_info.max_health
                 self.experience = player_info.experience

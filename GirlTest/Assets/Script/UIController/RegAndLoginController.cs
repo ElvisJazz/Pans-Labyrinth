@@ -105,7 +105,7 @@ public class RegAndLoginController : MonoBehaviour {
 	private void CheckResult(int squence_id, MessageConstant.Type type){
 		RegisterAndLoginMessageFromServer rl_message = null;
 		int i = 0;
-		while (rl_message == null && i<=8) {
+		while (rl_message == null && i<=20) {
 			rl_message = ClientSocket.GetInstance ().GetRegisterAndLoginMessage (squence_id);
 			Thread.Sleep (1000);
 			i++;
@@ -117,7 +117,7 @@ public class RegAndLoginController : MonoBehaviour {
 				OnClickBack ();
 				MessageTip.SetTip ("Register success, please login!");  
 			} else {
-				SceneManager.LoadScene ("Main");
+				SceneManager.LoadScene (1);
 			}
 		} else if (rl_message.message != "") {
 			MessageTip.SetTip (rl_message.message);  

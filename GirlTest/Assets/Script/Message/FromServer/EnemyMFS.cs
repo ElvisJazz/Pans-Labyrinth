@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
-[System.Serializable]
-public class EnemyMessageFromServer : BaseMessage {
+
+[Serializable]
+public struct EnemyInfo{
 	// Enemy type
 	public int enemy_type;
 	// Enemy id
@@ -20,5 +22,10 @@ public class EnemyMessageFromServer : BaseMessage {
 	public float[] target_position;
 	// Action type
 	public int action_type;
+}
+
+[Serializable]
+public class EnemyMessageFromServer : BaseMessage {
+	public Dictionary<string, EnemyInfo> enemy_info_dict;
 
 }
