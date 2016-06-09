@@ -146,7 +146,8 @@ public class ClientSocket
 	// Add message list
 	private void AddMessageList(string message){
 		if(Monitor.TryEnter (this)) {
-			messageList.Add (message);
+			if(messageList != null)
+				messageList.Add (message);
 			Monitor.Exit (this);
 		}
 	}
@@ -154,7 +155,7 @@ public class ClientSocket
 	// Pop message list
 	public string PopMessageList(){
 		if(Monitor.TryEnter (this)) {
-			if (messageList.Count > 0) {
+			if (messageList!=null && messageList.Count > 0) {
 				string message = messageList [0];
 				messageList.RemoveAt (0);
 				Monitor.Exit (this);

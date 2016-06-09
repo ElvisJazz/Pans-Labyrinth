@@ -47,7 +47,7 @@ class WeaponInfoDao(BaseDao):
 
     def data_to_dict(self, data_list):
         weapon_info_dict = {}
-        if data_list is not None:
+        if len(data_list) > 0:
             for data in data_list:
                 weapon_info_dict[data[0]] = WeaponInfo(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],(data[8],data[9],data[10]), data[11], data[12])
         return weapon_info_dict

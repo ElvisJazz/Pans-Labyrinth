@@ -7,8 +7,12 @@ public class PlayerExp : MonoBehaviour {
 	// Player's exp
 	int exp = 0;
 	public int Exp {
-		get;
-		set;
+		get{
+			return exp;
+		}
+		set{
+			exp = value;
+		}
 	}
 	// Max player's exp
 	public int MaxExp = 1000;

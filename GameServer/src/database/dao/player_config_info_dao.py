@@ -17,6 +17,6 @@ class PlayerConfigInfoDao(BaseDao):
         return o
 
     def data_to_object(self, data_tuple):
-        if data_tuple is not None:
+        if len(data_tuple) > 0:
             return PlayerConfigInfo(data_tuple[0],data_tuple[1],data_tuple[2],data_tuple[3])
         return None

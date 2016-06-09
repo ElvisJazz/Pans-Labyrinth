@@ -18,7 +18,7 @@ class MazeConfigInfoDao(BaseDao):
 
     def data_to_list(self, data_list):
         maze_config_info_list = []
-        if data_list is not None:
+        if len(data_list) > 0:
             for data in data_list:
-                maze_config_info_list.append(MazeConfigInfo(data[0],data[1],data[2],data[3]))
+                maze_config_info_list.append(MazeConfigInfo(data[0],data[1],data[2],data[3],data[4],data[5]))
         return maze_config_info_list

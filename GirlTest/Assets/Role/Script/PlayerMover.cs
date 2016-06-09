@@ -13,7 +13,7 @@ using System.Collections;
 
 public class PlayerMover : MonoBehaviour
 {
-
+	public float UploadInfoTime = 1.0f;			// The rate of uploading player information to server 
 	public float AnimSpeed = 1.5f;				// Speed of backplay of the animation
 	public float LookSmoother = 3.0f;			// A smoothing setting for camera motion
 	public bool UseCurves = true;				// Whether to use mecanim curves
@@ -44,6 +44,8 @@ public class PlayerMover : MonoBehaviour
 	private AnimatorStateInfo currentBaseState;	// Base layer state information
 	private GameObject cameraObject= null;			// Camera
 	private PlayerHealth playerHealth = null;    // Player health script
+
+	private float currentDeltaTime = 0;
 
 		
 	// State constant
@@ -198,19 +200,14 @@ public class PlayerMover : MonoBehaviour
 				}
 			}
 		}
-	}
 
-	void OnGUI()
-	{
-//		GUI.Box(new Rect(Screen.width -260, 10 ,250 ,150), "Interaction");
-//		GUI.Label(new Rect(Screen.width -245,30,250,30),"Up/Down Arrow : Go Forwald/Go Back");
-//		GUI.Label(new Rect(Screen.width -245,50,250,30),"Left/Right Arrow : Turn Left/Turn Right");
-//		GUI.Label(new Rect(Screen.width -245,70,250,30),"Hit Space key while Running : Jump");
-//		GUI.Label(new Rect(Screen.width -245,90,250,30),"Hit Spase key while Stopping : Rest");
-//		GUI.Label(new Rect(Screen.width -245,110,250,30),"Left Control : Front Camera");
-//		GUI.Label(new Rect(Screen.width -245,130,250,30),"Alt : LookAt Camera");
+		// Upload information to server
+		currentDeltaTime += Time.fixedDeltaTime;
+		if (currentDeltaTime >= UploadInfoTime) {
+			currentDeltaTime = 0;
+			PlayerManager.UpdateServerPlayer();
+		}
 	}
-
 
 	// Reset collider
 	void resetCollider()

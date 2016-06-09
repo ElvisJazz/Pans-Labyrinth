@@ -56,6 +56,7 @@ class RegisterManager(object):
             else:
                 raise Exception("Instance of RegisterMessageFromClient is expected!")
         except Exception, e:
+            conn.rollback()
             raise e
         finally:
             if conn is not None:
@@ -92,20 +93,21 @@ class RegisterManager(object):
     @classmethod
     def add_enemy_info(cls, player_id, conn):
         # Get enemy config
-        enemy_config_bl = EnemyConfigInfoBL(player_id)
-        enemy_config_bl.set_conn(conn)
-        enemy_config_list = enemy_config_bl.get_list()
-        # Create enemy list according to config list
-        enemy_list = []
-        id = 0
-        for config in enemy_config_list:
-            for i in range(config.amount):
-                enemy = EnemyInfo(id, config.type_id, config.max_health, config.max_health, (0,0,0), config.hurt, config.experience)
-                enemy_list.append(enemy)
-                id += 1
-        enemy_info_bl = EnemyInfoBL(player_id)
-        enemy_info_bl.set_conn(conn)
-        return enemy_info_bl.add_list(enemy_list)
+        # enemy_config_bl = EnemyConfigInfoBL(player_id)
+        # enemy_config_bl.set_conn(conn)
+        # enemy_config_list = enemy_config_bl.get_list()
+        # # Create enemy list according to config list
+        # enemy_list = []
+        # id = 0
+        # for config in enemy_config_list:
+        #     for i in range(config.amount):
+        #         enemy = EnemyInfo(id, config.type_id, config.max_health, config.max_health, (0,0,0), config.hurt, config.experience)
+        #         enemy_list.append(enemy)
+        #         id += 1
+        # enemy_info_bl = EnemyInfoBL(player_id)
+        # enemy_info_bl.set_conn(conn)
+        # return enemy_info_bl.add_list(enemy_list)
+        return True
 
     @classmethod
     def add_scene_info(cls, player_id, conn):
@@ -122,7 +124,7 @@ class RegisterManager(object):
                     for j in range(0, config.column):
                         maze_array.append(tmp_array[i][j])
                 maze_json = json.dumps(maze_array, default=lambda obj: obj.__dict__)
-                maze = MazeInfo(0, config.type_id, config.row, config.column, maze_json)
+                maze = MazeInfo(0, config.type_id, config.row, config.column, maze_json, config.width, config.height)
                 maze_info_bl = MazeInfoBL(player_id)
                 maze_info_bl.set_conn(conn)
                 return maze_info_bl.add_maze(maze)

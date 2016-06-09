@@ -55,3 +55,15 @@ class OnlineManager(object):
             if not cls.manager_buffer[socket].save():
                 raise Exception("Failed to save game data. Please try again!")
             return True
+
+    @classmethod
+    def has_manager(cls, player_id):
+        return cls.socket_buffer.has_key(player_id)
+
+    @classmethod
+    def update_socket(cls, player_id, socket):
+        ts = cls.socket_buffer[player_id]
+        if socket != ts:
+            cls.socket_buffer[player_id] = socket
+            cls.manager_buffer[socket] = cls.manager_buffer[ts]
+            cls.manager_buffer.pop(ts)

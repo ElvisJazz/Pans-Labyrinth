@@ -2,8 +2,6 @@
 
 [System.Serializable]
 public class PlayerMessageFromServer : BaseMessage {
-	// Player id
-	public int player_id;
 	// Health
 	public int health;
 	// Max health

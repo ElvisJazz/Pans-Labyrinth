@@ -9,11 +9,21 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 
 public class EnemyMover : MonoBehaviour {
-
 	// Speed
 	public float Speed = 5.0f;
 	// Animator
 	Animator animator = null;
+	// Routine
+	Position[] routine;
+	public Position[] Routine {
+		get {
+			return routine;
+		}
+		set {
+			routine = value;
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();

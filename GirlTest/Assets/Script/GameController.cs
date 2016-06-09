@@ -27,17 +27,6 @@ public class GameController : MonoBehaviour {
 			Screen.fullScreen = true;
 			socket = ClientSocket.GetInstance ();
 		}
-		
-//		p pp = new p ();
-//		pp.a = 2;
-//		pp.pp = new q[2,2];
-//		pp.pp [0,0] = new q(3);
-//		pp.pp [0,1] = new q(3);
-//		pp.pp [1,0] = new q(4);
-//		pp.pp [1,1] = new q(4);
-//		string s = JsonUtility.ToJson (pp);
-//		p ppp = JsonUtility.FromJson<p> (s);
-//		Debug.Log (1);
 	}
 	
 	// Update is called once per frame

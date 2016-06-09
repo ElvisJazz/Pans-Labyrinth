@@ -7,10 +7,12 @@
 
 class MazeInfo(object):
 
-    def __init__(self, maze_id, type_id, row, column, maze_json):
+    def __init__(self, maze_id, type_id, row, column, maze_json, width, height):
         self.maze_id = maze_id
         self.type_id = type_id
         self.maze_json = maze_json
         self.row = row
         self.column = column
+        self.width = width
+        self.height = height
 

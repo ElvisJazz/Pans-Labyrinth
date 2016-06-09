@@ -16,6 +16,9 @@ public class EnemyHealth : MonoBehaviour {
 		get{
 			return health;
 		}
+		set{
+			health = value;
+		}
 	}
 	// Health color
 	public Color healthColor = Color.green; 

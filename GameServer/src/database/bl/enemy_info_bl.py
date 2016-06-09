@@ -9,11 +9,13 @@ from database.dao.enemy_info_dao import EnemyInfoDao
 
 class EnemyInfoBL(BaseBL):
 
+
     def __init__(self, player_id, conn=None, has_own_conn=False):
         self.dao = EnemyInfoDao(player_id, conn, has_own_conn)
+        self.max_id = 0
 
-    # Get enemy dict
-    def get_dict(self):
+    # Get enemy dict and max id
+    def get_dict_and_max_id(self):
         return self.dao.get_dict_by_player_id()
 
     # Add enemy list

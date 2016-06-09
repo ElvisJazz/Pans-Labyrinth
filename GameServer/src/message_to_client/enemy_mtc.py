@@ -27,10 +27,10 @@ class EnemyMessageToClient(object):
                     e.position = enemy_info.position
                     e.hurt = enemy_info.hurt
                     e.experience = enemy_info.experience
-                    e.target_position = enemy_info.target_position
+                    e.target_routine = enemy_info.target_routine
                     e.action_type = enemy_info.action_type
                 elif message_type == MessageType.UPDATE:
-                    e.target_position = enemy_info.target_position
+                    e.target_routine = enemy_info.target_routine
                     e.action_type = enemy_info.action_type
                 self.enemy_info_list.append(e)
             else:

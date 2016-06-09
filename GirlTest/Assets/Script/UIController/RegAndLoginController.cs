@@ -126,13 +126,9 @@ public class RegAndLoginController : MonoBehaviour {
 
 	// Send register and login message
 	private void SendRegiserAndLoginMessage(MessageConstant.Type type, string username, string password){
-		RegisterAndLoginMessageToServer data = new RegisterAndLoginMessageToServer();
-		data.target_type = MessageConstant.TargetType.SYSTEM.GetHashCode ();
-		data.message_type = type.GetHashCode ();
-		data.name = username;
-		data.password = password;
-		int sequence_id = Mathf.RoundToInt(Time.time*1000);
-		data.sequence_id = sequence_id;
+		int sequence_id = Mathf.RoundToInt (Time.time * 1000);
+		RegisterAndLoginMessageToServer data = new RegisterAndLoginMessageToServer(type.GetHashCode (), MessageConstant.TargetType.SYSTEM.GetHashCode (),
+			username, password, sequence_id);
 		String message = JsonUtility.ToJson (data);
 		ClientSocket.GetInstance ().SendMessage (message+BaseMessage.END_MARK);
 		CheckResult (sequence_id, type);

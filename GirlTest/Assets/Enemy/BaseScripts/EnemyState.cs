@@ -18,4 +18,24 @@ public class EnemyState : MonoBehaviour {
 			isActive = value;
 		}
 	}
+	// Is attack
+	bool isAttack = false;
+	public bool Attack{
+		get{
+			return isAttack;
+		}
+		set{
+			isAttack = value;
+		}
+	}
+	// Is run
+	bool isRun = false;
+	public bool Run{
+		get{
+			return isRun;
+		}
+		set{
+			isRun = value;
+		}
+	}
 }

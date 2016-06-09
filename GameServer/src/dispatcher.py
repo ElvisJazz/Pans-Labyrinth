@@ -18,26 +18,36 @@ class Dispatcher(object):
     @classmethod
     def dispatch(cls, socket, message):
         mfc = MessagePacker.pack(message)
-        r_message = RegisterAndLoginMessage(mfc.message_type, mfc.target_type, mfc.sequence_id)
         reply = False
+        r_message = None
         # Dispatch message
         try:
             # Register
             if mfc.message_type == MessageType.REGISTER:
                 reply = True
+                r_message = RegisterAndLoginMessage(mfc.message_type, mfc.target_type, mfc.sequence_id)
                 r_message.success = RegisterManager.register(mfc)
+
             # Login
             elif mfc.message_type == MessageType.LOGIN:
                 reply = True
+                r_message = RegisterAndLoginMessage(mfc.message_type, mfc.target_type, mfc.sequence_id)
                 user_info = LoginManager.login(mfc)
                 r_message.success = True if user_info is not None else False
                 if r_message.success:
-                    OnlineManager.add_game_manager(socket, user_info.player_id)
+                    if OnlineManager.has_manager(user_info.player_id):
+                        OnlineManager.update_socket(user_info.player_id, socket)
+                    else:
+                        OnlineManager.add_game_manager(socket, user_info.player_id)
                     game_manager = OnlineManager.get_game_manager(socket)
+                    game_manager.is_running = True
+                    # Recover last scene
                     game_manager.weapon_manager.generate_default_weapon()
                     game_manager.scene_manager.generate()
                     game_manager.player_manager.generate()
                     game_manager.enemy_manager.generate()
+                    # Start generating new enemies in fixed time
+                    game_manager.enemy_manager.generate_in_time()
 
             # Update
             elif mfc.message_type == MessageType.UPDATE:
@@ -48,26 +58,33 @@ class Dispatcher(object):
                     game_manager.weapon_manager.update(mfc)
                 elif mfc.target_type == MessageTargetType.ENEMY:
                     game_manager.enemy_manager.update(mfc)
+
             # Save
             elif mfc.message_type == MessageType.SAVE:
                 reply = True
-                r_message.success = OnlineManager.save_game_manager(socket)
+                #r_message.success = OnlineManager.save_game_manager(socket)
+
             # Logout
             elif mfc.message_type == MessageType.LOGOUT:
                 reply = True
-                r_message.success = OnlineManager.remove_and_save_game_manager(socket)
+                #r_message.success = OnlineManager.remove_and_save_game_manager(socket)
 
         except Exception, e:
-            r_message.message = str(e)
+            if r_message is not None:
+                r_message.message = str(e)
             traceback.print_exc()
         # Send reply message
-        if reply:
+        if reply and r_message is not None:
             cls.send(socket, r_message)
 
     @classmethod
     def send(cls, socket, r_message):
-        json_str = MessagePacker.unpack(r_message)
-        socket.send(json_str)
+        if not socket.connected:
+            game_manager = OnlineManager.get_game_manager(socket)
+            game_manager.is_running = False
+        else:
+            json_str = MessagePacker.unpack(r_message)
+            socket.send(json_str)
 
 
 

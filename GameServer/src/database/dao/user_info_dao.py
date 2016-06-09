@@ -44,7 +44,7 @@ class UserInfoDao(BaseDao):
         return r
 
     def data_to_object(self, data_tuple):
-        if data_tuple is not None:
+        if len(data_tuple) > 0:
             return UserInfo(data_tuple[0],data_tuple[1],data_tuple[2])
         return None
 

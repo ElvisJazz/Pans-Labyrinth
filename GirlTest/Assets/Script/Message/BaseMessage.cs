@@ -8,4 +8,12 @@ public class BaseMessage {
 	public int message_type;
 	// Message target type
 	public int target_type;
+
+	public BaseMessage(int message_type, int target_type){
+		this.message_type = message_type;
+		this.target_type = target_type;
+	}
+
+	public BaseMessage(){
+	}
 }

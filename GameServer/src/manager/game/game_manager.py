@@ -14,10 +14,11 @@ class GameManager(object):
 
     def __init__(self, player_id):
         self.player_id = player_id
+        self.is_running = True
         self.scene_manager = SceneManager(player_id)
         self.player_manager = PlayerManager(player_id)
         self.weapon_manager = WeaponManager(player_id)
-        self.enemy_manager = EnemyManager(player_id)
+        self.enemy_manager = EnemyManager(player_id, self)
 
     def load(self):
         self.scene_manager.load()

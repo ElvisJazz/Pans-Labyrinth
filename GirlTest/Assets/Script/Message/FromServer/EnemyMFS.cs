@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 
 [Serializable]
+public struct Position{
+	public int x;
+	public int y;
+	public int z;
+}
+
+[Serializable]
 public struct EnemyInfo{
 	// Enemy type
 	public int enemy_type;
@@ -18,14 +25,14 @@ public struct EnemyInfo{
 	public int hurt;
 	// Experience
 	public int experience;
-	// Target position
-	public float[] target_position;
+	// Target routine
+	public Position[] target_routine;
 	// Action type
 	public int action_type;
 }
 
 [Serializable]
 public class EnemyMessageFromServer : BaseMessage {
-	public Dictionary<string, EnemyInfo> enemy_info_dict;
+	public EnemyInfo[] enemy_info_list;
 
 }

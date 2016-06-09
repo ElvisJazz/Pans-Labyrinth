@@ -44,7 +44,7 @@ class PlayerInfoDao(BaseDao):
         return r
 
     def data_to_object(self, data_tuple):
-        if data_tuple is not None:
+        if len(data_tuple) > 0:
             return PlayerInfo(data_tuple[0],data_tuple[1],data_tuple[2],(data_tuple[3],data_tuple[4],data_tuple[5]),data_tuple[6],
                           data_tuple[7],data_tuple[8],data_tuple[9])
         return None

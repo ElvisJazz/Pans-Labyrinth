@@ -15,6 +15,7 @@ public class GoblinState : EnemyState {
 
 	void Start(){
 		Active = true;
+		GetComponent<Animator>().SetTrigger("Idle");
 	}
 
 	// Use this for initialization
