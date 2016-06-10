@@ -7,8 +7,9 @@ public class EnemyType {
 	}
 
 	public enum ActionType{
-		RUN = 0,
-		ATTACK = 1
+		IDLE = 0,
+		RUN = 1,
+		ATTACK = 2
 	}
 
 }

@@ -50,5 +50,5 @@ class EnemyInfoDao(BaseDao):
         if len(data_list) > 0:
             for data in data_list:
                 enemy_info_dict[data[0]] = EnemyInfo(data[0],data[1],data[2],data[3],(data[4],data[5],data[6]),data[7],data[8])
-            id = data_list[len(data_list)-1][0]
+            id = data_list[-1][0]
         return enemy_info_dict, id

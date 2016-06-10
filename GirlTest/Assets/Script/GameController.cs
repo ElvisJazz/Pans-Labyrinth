@@ -2,20 +2,6 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-[System.Serializable]
-public class q{
-	public int qq;
-	public q(int qqq){
-		qq = qqq;
-	}
-}
-
-[System.Serializable]
-public class p{
-	public int a;
-	public q[,] pp;
-}
-
 public class GameController : MonoBehaviour {
 	// Client socket
 	private ClientSocket socket = null;

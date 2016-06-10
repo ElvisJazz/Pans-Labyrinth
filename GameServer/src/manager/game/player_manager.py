@@ -15,26 +15,26 @@ from message_to_client.player_mtc import PlayerMessageToClient
 class PlayerManager(object):
     def __init__(self, player_id):
         self._player_id = player_id
-        self._player_info = None
+        self.player_info = None
 
     def save(self):
         """save the information of player"""
         player_info_bl = PlayerInfoBL(self._player_id, None, True)
-        flag = player_info_bl.update_player(self._player_info)
+        flag = player_info_bl.update_player(self.player_info)
         return flag
 
     def load(self):
         """load the information of player"""
         player_info_bl = PlayerInfoBL(self._player_id, None, True)
-        self._player_info = player_info_bl.get_by_id()
+        self.player_info = player_info_bl.get_by_id()
 
     def update(self, player_mfc):
         """ update player info """
         if isinstance(player_mfc, PlayerMessageFromClient):
-            player_mfc.set_player_info(self._player_info)
+            player_mfc.set_player_info(self.player_info)
 
     def generate(self):
         """ send player info to client """
         socket = manager.manager_online.OnlineManager.socket_buffer[self._player_id]
-        message = PlayerMessageToClient(MessageType.UPDATE, MessageTargetType.PLAYER, self._player_info)
+        message = PlayerMessageToClient(MessageType.UPDATE, MessageTargetType.PLAYER, self.player_info)
         dispatcher.Dispatcher.send(socket, message)

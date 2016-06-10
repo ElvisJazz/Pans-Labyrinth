@@ -5290,7 +5290,7 @@ GameObject:
   - 114: {fileID: 11450818}
   - 114: {fileID: 11472530}
   - 114: {fileID: 11489076}
-  - 54: {fileID: 5408802}
+  - 54: {fileID: 5460702}
   m_Layer: 0
   m_Name: GOBLIN
   m_TagString: Enemy
@@ -7619,7 +7619,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100506}
-  m_LocalRotation: {x: 0.6613818, y: -0.32186097, z: 0.36608946, w: 0.570051}
+  m_LocalRotation: {x: 0.66138184, y: -0.321861, z: 0.3660895, w: 0.5700511}
   m_LocalPosition: {x: -0.26663175, y: -0.008684978, z: -0.044942692}
   m_LocalScale: {x: 0.9999999, y: 1.0000001, z: 1.0000001}
   m_Children: []
@@ -8046,7 +8046,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100596}
-  m_LocalRotation: {x: 0.6613819, y: -0.32186106, z: 0.36608964, w: 0.57005084}
+  m_LocalRotation: {x: 0.66138184, y: -0.32186103, z: 0.3660896, w: 0.5700508}
   m_LocalPosition: {x: -0.1434544, y: -0.008684998, z: -0.04494271}
   m_LocalScale: {x: 1, y: 0.99999994, z: 0.9999999}
   m_Children:
@@ -10018,7 +10018,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_Mesh: {fileID: 4300000, guid: 258d8fe23a2ac6e45a642dba5854cda8, type: 3}
---- !u!54 &5408802
+--- !u!54 &5460702
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -10029,8 +10029,8 @@ Rigidbody:
   m_Drag: Infinity
   m_AngularDrag: Infinity
   m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
   m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!65 &6525858
@@ -10041,7 +10041,7 @@ BoxCollider:
   m_GameObject: {fileID: 100702}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.0860146, y: 1.5103545, z: 1.412368}
   m_Center: {x: -0.043007374, y: 0.74755347, z: 0.2922709}
@@ -10055,8 +10055,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.0860146, y: 1.5103545, z: 0.982797}
-  m_Center: {x: -0.043007374, y: 0.74755347, z: 0.083147585}
+  m_Size: {x: 0.70211005, y: 1.5103545, z: 0.57438695}
+  m_Center: {x: -0.01441884, y: 0.74755347, z: -0.0067023635}
 --- !u!95 &9500000
 Animator:
   serializedVersion: 3

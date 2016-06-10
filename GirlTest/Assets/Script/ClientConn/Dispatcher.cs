@@ -33,7 +33,7 @@ public class Dispatcher
 			manager.CreateEnemy (em);
 		}else if(em.message_type == MessageConstant.Type.UPDATE.GetHashCode()){
 			EnemyManager manager = GameObject.Find ("EnemySpawner").GetComponent<EnemyManager> ();
-			manager.UpdateEnemy (em);
+			manager.UpdateClientEnemy (em);
 		}
 	}
 

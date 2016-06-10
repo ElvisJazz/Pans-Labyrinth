@@ -5,17 +5,20 @@
 //
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Animator))]
 
 public class EnemyMover : MonoBehaviour {
 	// Speed
-	public float Speed = 5.0f;
+	public float Speed = 5f;
 	// Animator
 	Animator animator = null;
+	// State script
+	EnemyState enemyState= null;
 	// Routine
-	Position[] routine;
-	public Position[] Routine {
+	List<Position> routine = null;
+	public List<Position> Routine {
 		get {
 			return routine;
 		}
@@ -27,6 +30,13 @@ public class EnemyMover : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();
+		enemyState = GetComponent<EnemyState> ();
+	}
+
+	void Update() {
+		if (enemyState.Run) {
+			RunToTarget ();
+		}
 	}
 
 	// Turn to the target
@@ -36,16 +46,25 @@ public class EnemyMover : MonoBehaviour {
 	}
 
 	// Run towards to target
-	public bool RunToTarget(Vector3 pos){
-		TurnToTarget (pos);
-		if (pos == transform.position) {
-			animator.SetTrigger ("Idle");
-			return true;
+	public bool RunToTarget(){
+		if (routine != null && routine.Count > 0) {
+			Vector3 pos = new Vector3 (routine [0].x, routine [0].y, routine [0].z);
+			if (pos == transform.position) {
+				routine.RemoveAt (0);
+				if (routine.Count > 0)
+					pos = new Vector3 (routine [0].x, routine [0].y, routine [0].z);
+				else
+					return true;
+			}
+
+			TurnToTarget (pos);
+			// Set run state
+			animator.SetFloat ("Speed", Speed);
+			// Set position
+			transform.position = Vector3.MoveTowards(transform.position, pos, Speed * Time.fixedDeltaTime);
+		} else {
+			animator.SetFloat ("Speed", 0);
 		}
-		// Set run state
-		animator.SetTrigger ("Run");
-		// Set position
-		transform.position += Vector3.forward * Speed * Time.fixedTime;
 		return false;
 	}
 }

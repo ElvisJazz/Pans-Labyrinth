@@ -18,12 +18,13 @@ class Direction:
 # Maze cell class
 class MazeCell(object):
     def __init__(self):
-        self.isVisited = False
-        self.isEnemySpawner = False
-        self.wallRight = False
-        self.wallFront = False
-        self.wallLeft = False
-        self.wallBack = False
+        self.parent_pos = None
+        self.is_visited = False
+        self.is_enemy_spawner = False
+        self.wall_right = False
+        self.wall_front = False
+        self.wall_left = False
+        self.wall_back = False
 
 # Class of target cell which is to be visited
 class TargetCell(object):
@@ -59,59 +60,64 @@ class MazeGenerator(object):
             tc = self.target_cell_list[self.get_cell_in_range(len(self.target_cell_list)-1)]
 
             # Check move right
-            if tc.column+1<self.columns and not self.maze_array[tc.row][tc.column+1].isVisited and not self.is_cell_in_target_list(tc.row, tc.column+1):
+            if tc.column+1<self.columns and not self.maze_array[tc.row][tc.column+1].is_visited and not self.is_cell_in_target_list(tc.row, tc.column+1):
                 moves_available[moves_available_count] = Direction.RIGHT
                 moves_available_count += 1
-            elif not self.maze_array[tc.row][tc.column].isVisited and tc.move != Direction.LEFT:
-                self.maze_array[tc.row][tc.column].wallRight = True
+            elif not self.maze_array[tc.row][tc.column].is_visited and tc.move != Direction.LEFT:
+                self.maze_array[tc.row][tc.column].wall_right = True
                 if tc.column+1 < self.columns:
-                    self.maze_array[tc.row][tc.column+1].wallLeft = True
+                    self.maze_array[tc.row][tc.column+1].wall_left = True
 
             # Check move forward
-            if tc.row+1<self.rows and not self.maze_array[tc.row+1][tc.column].isVisited and not self.is_cell_in_target_list(tc.row+1, tc.column):
+            if tc.row+1<self.rows and not self.maze_array[tc.row+1][tc.column].is_visited and not self.is_cell_in_target_list(tc.row+1, tc.column):
                 moves_available[moves_available_count] = Direction.FRONT
                 moves_available_count += 1
-            elif not self.maze_array[tc.row][tc.column].isVisited and tc.move != Direction.BACK:
-                self.maze_array[tc.row][tc.column].wallFront = True
+            elif not self.maze_array[tc.row][tc.column].is_visited and tc.move != Direction.BACK:
+                self.maze_array[tc.row][tc.column].wall_front = True
                 if tc.row+1 < self.rows:
-                    self.maze_array[tc.row+1][tc.column].wallBack = True
+                    self.maze_array[tc.row+1][tc.column].wall_back = True
 
             # Check move left
-            if tc.column>=1 and not self.maze_array[tc.row][tc.column-1].isVisited and not self.is_cell_in_target_list(tc.row, tc.column-1):
+            if tc.column>=1 and not self.maze_array[tc.row][tc.column-1].is_visited and not self.is_cell_in_target_list(tc.row, tc.column-1):
                 moves_available[moves_available_count] = Direction.LEFT
                 moves_available_count += 1
-            elif not self.maze_array[tc.row][tc.column].isVisited and tc.move != Direction.RIGHT:
-                self.maze_array[tc.row][tc.column].wallLeft = True
+            elif not self.maze_array[tc.row][tc.column].is_visited and tc.move != Direction.RIGHT:
+                self.maze_array[tc.row][tc.column].wall_left = True
                 if tc.column >= 1:
-                    self.maze_array[tc.row][tc.column-1].wallRight = True
+                    self.maze_array[tc.row][tc.column-1].wall_right = True
 
             # Check move backward
-            if tc.row >= 1 and not self.maze_array[tc.row-1][tc.column].isVisited and not self.is_cell_in_target_list(tc.row-1, tc.column):
+            if tc.row >= 1 and not self.maze_array[tc.row-1][tc.column].is_visited and not self.is_cell_in_target_list(tc.row-1, tc.column):
                 moves_available[moves_available_count] = Direction.BACK
                 moves_available_count += 1
-            elif not self.maze_array[tc.row][tc.column].isVisited and tc.move != Direction.FRONT:
-                self.maze_array[tc.row][tc.column].wallBack = True
+            elif not self.maze_array[tc.row][tc.column].is_visited and tc.move != Direction.FRONT:
+                self.maze_array[tc.row][tc.column].wall_back = True
                 if tc.row >= 1:
-                    self.maze_array[tc.row-1][tc.column].wallFront = True
+                    self.maze_array[tc.row-1][tc.column].wall_front = True
 
             # Check the enemy spawner
-            if not self.maze_array[tc.row][tc.column].isVisited and moves_available_count == 0:
-                self.maze_array[tc.row][tc.column].isEnemySpawner = True
+            if not self.maze_array[tc.row][tc.column].is_visited and moves_available_count == 0:
+                self.maze_array[tc.row][tc.column].is_enemy_spawner = True
 
             # Set current cell visited
-            self.maze_array[tc.row][tc.column].isVisited = True
+            self.maze_array[tc.row][tc.column].is_visited = True
+
 
             if moves_available_count > 0:
                 random.seed()
                 dir = moves_available[random.randrange(0, moves_available_count)]
                 if dir == Direction.RIGHT:
                     self.target_cell_list.append(TargetCell(tc.row, tc.column+1, Direction.RIGHT))
+                    self.maze_array[tc.row][tc.column+1].parent_pos = (tc.row, tc.column)
                 elif dir == Direction.FRONT:
                     self.target_cell_list.append(TargetCell(tc.row+1, tc.column, Direction.FRONT))
+                    self.maze_array[tc.row+1][tc.column].parent_pos = (tc.row, tc.column)
                 elif dir == Direction.LEFT:
                     self.target_cell_list.append(TargetCell(tc.row, tc.column-1, Direction.LEFT))
+                    self.maze_array[tc.row][tc.column-1].parent_pos = (tc.row, tc.column)
                 elif dir == Direction.BACK:
                     self.target_cell_list.append(TargetCell(tc.row-1, tc.column, Direction.BACK))
+                    self.maze_array[tc.row-1][tc.column].parent_pos = (tc.row, tc.column)
             else:
                 self.target_cell_list.remove(tc)
 

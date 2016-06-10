@@ -2,13 +2,17 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\Manager\EnemyManager.cs">
     <Files>
+      <File FileName="Assets\Script\GameController.cs" Line="4" Column="1" />
       <File FileName="Assets\Script\Manager\EnemyManager.cs" Line="24" Column="29" />
-      <File FileName="Assets\Enemy\BaseScripts\EnemyHealth.cs" Line="21" Column="4" />
+      <File FileName="Assets\Enemy\BaseScripts\EnemyHealth.cs" Line="1" Column="1" />
       <File FileName="Assets\Enemy\BaseScripts\EnemyAttack.cs" Line="1" Column="1" />
       <File FileName="Assets\Enemy\BaseScripts\EnemyMover.cs" Line="25" Column="3" />
       <File FileName="Assets\Script\Message\FromServer\EnemyMFS.cs" Line="6" Column="1" />
-      <File FileName="Assets\Enemy\BaseScripts\EnemyState.cs" Line="38" Column="9" />
-      <File FileName="Assets\Maze\Script\MazeSpawner.cs" Line="116" Column="56" />
+      <File FileName="Assets\Enemy\BaseScripts\EnemyState.cs" Line="1" Column="1" />
+      <File FileName="Assets\Maze\Script\MazeSpawner.cs" Line="34" Column="31" />
+      <File FileName="Assets\Script\Message\FromServer\MazeMFS.cs" Line="1" Column="1" />
+      <File FileName="Assets\Script\Message\FromServer\PlayerMFS.cs" Line="1" Column="1" />
+      <File FileName="Assets\Maze\Script\Maze.cs" Line="12" Column="24" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

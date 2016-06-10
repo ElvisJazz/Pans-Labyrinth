@@ -47,23 +47,23 @@ public class MazeSpawner : MonoBehaviour {
 				wall = Instantiate(Floor,new Vector3(x,0,z), Quaternion.Euler(0,0,0)) as GameObject;
 				SetTransformAndTag(wall);
 
-				if(cell.wallRight){
+				if(cell.wall_right){
 					wall = Instantiate(Wall,new Vector3(x+CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,90,0)) as GameObject;// right
 					SetTransformAndTag(wall);
 				}
-				if(cell.wallFront){
+				if(cell.wall_front){
 					wall = Instantiate(Wall,new Vector3(x,0,z+CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,0,0)) as GameObject;// front
 					SetTransformAndTag(wall);
 				}
-				if(cell.wallLeft){
+				if(cell.wall_left){
 					wall = Instantiate(Wall,new Vector3(x-CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,270,0)) as GameObject;// left
 					SetTransformAndTag(wall);
 				}
-				if(cell.wallBack){
+				if(cell.wall_back){
 					wall = Instantiate(Wall,new Vector3(x,0,z-CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,180,0)) as GameObject;// back
 					SetTransformAndTag(wall);
 				}
-				if(cell.isEnemySpawner && EnemySpawnerPrefab != null){
+				if(cell.is_enemy_spawner && EnemySpawnerPrefab != null){
 					wall = Instantiate(EnemySpawnerPrefab,new Vector3(x,1,z), Quaternion.Euler(0,0,0)) as GameObject;
 					SetTransformAndTag(wall);
 				}

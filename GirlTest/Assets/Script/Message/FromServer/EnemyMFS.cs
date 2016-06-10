@@ -26,7 +26,7 @@ public struct EnemyInfo{
 	// Experience
 	public int experience;
 	// Target routine
-	public Position[] target_routine;
+	public List<Position> target_routine;
 	// Action type
 	public int action_type;
 }

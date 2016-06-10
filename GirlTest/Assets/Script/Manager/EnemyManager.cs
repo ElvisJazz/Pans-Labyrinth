@@ -30,7 +30,7 @@ public class EnemyManager : MonoBehaviour {
 	}
 
 	// Update enemies
-	public void UpdateEnemy(EnemyMessageFromServer em){
+	public void UpdateClientEnemy(EnemyMessageFromServer em){
 		foreach (EnemyInfo ei in em.enemy_info_list) {
 			GameObject enemy = enemy_table [ei.enemy_id] as GameObject;
 			EnemyMover eMover = enemy.GetComponent<EnemyMover> ();
@@ -40,6 +40,17 @@ public class EnemyManager : MonoBehaviour {
 			// Set state
 			SetState(ei.action_type, eState);
 		}
+	}
+
+	// Update server enemy information
+	public static void UpdateServerEnemy(){
+		EnemyMessageToServer em = new EnemyMessageToServer (MessageConstant.Type.UPDATE.GetHashCode(),MessageConstant.TargetType.ENEMY.GetHashCode (),
+		if (lastPM != null && lastPM.CheckEqual(pm)) {
+			return;
+		}
+		lastPM = pm;
+		string message = JsonUtility.ToJson (pm);
+		ClientSocket.GetInstance ().SendMessage (message+BaseMessage.END_MARK);
 	}
 
 	// Set state

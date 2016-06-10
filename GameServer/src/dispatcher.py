@@ -52,8 +52,11 @@ class Dispatcher(object):
             # Update
             elif mfc.message_type == MessageType.UPDATE:
                 game_manager = (OnlineManager.get_game_manager(socket))
+                if game_manager is None:
+                    raise "Please login!"
                 if mfc.target_type == MessageTargetType.PLAYER:
                     game_manager.player_manager.update(mfc)
+                    game_manager.enemy_manager.update_client_enemy()
                 elif mfc.target_type == MessageTargetType.WEAPON:
                     game_manager.weapon_manager.update(mfc)
                 elif mfc.target_type == MessageTargetType.ENEMY:
