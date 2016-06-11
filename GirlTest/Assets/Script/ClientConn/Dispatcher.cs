@@ -27,6 +27,8 @@ public class Dispatcher
 
 	// Handle enmey message
 	public static void HandleEnemyMessage (string message){
+		if (message == null)
+			return;
 		EnemyMessageFromServer em = JsonUtility.FromJson<EnemyMessageFromServer> (message);
 		if (em.message_type == MessageConstant.Type.CREATE.GetHashCode ()) {
 			EnemyManager manager = GameObject.Find ("EnemySpawner").GetComponent<EnemyManager> ();

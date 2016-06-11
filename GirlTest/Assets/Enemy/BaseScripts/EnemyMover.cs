@@ -10,14 +10,25 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Animator))]
 
 public class EnemyMover : MonoBehaviour {
+	int enemyId;
+	public int EnemyId {
+		get{
+			return enemyId;
+		}
+		set{
+			enemyId = value;
+		}
+	}
 	// Speed
 	public float Speed = 5f;
 	// Animator
 	Animator animator = null;
 	// State script
 	EnemyState enemyState= null;
+	// Enemy manager
+	EnemyManager enemyManager = null;
 	// Routine
-	List<Position> routine = null;
+	List<Position> routine = new List<Position>();
 	public List<Position> Routine {
 		get {
 			return routine;
@@ -31,12 +42,11 @@ public class EnemyMover : MonoBehaviour {
 	void Start () {
 		animator = GetComponent<Animator> ();
 		enemyState = GetComponent<EnemyState> ();
+		enemyManager = GameObject.Find ("EnemySpawner").GetComponent<EnemyManager> ();
 	}
 
 	void Update() {
-		if (enemyState.Run) {
-			RunToTarget ();
-		}
+		RunToTarget ();
 	}
 
 	// Turn to the target
@@ -53,10 +63,11 @@ public class EnemyMover : MonoBehaviour {
 				routine.RemoveAt (0);
 				if (routine.Count > 0)
 					pos = new Vector3 (routine [0].x, routine [0].y, routine [0].z);
-				else
+				else {
+					enemyManager.UpdateSignleServerEnemy (enemyId);
 					return true;
+				}
 			}
-
 			TurnToTarget (pos);
 			// Set run state
 			animator.SetFloat ("Speed", Speed);
@@ -66,5 +77,9 @@ public class EnemyMover : MonoBehaviour {
 			animator.SetFloat ("Speed", 0);
 		}
 		return false;
+	}
+
+	void OnCollisionEnter(Collision other){
+		Debug.Log ("hha");
 	}
 }

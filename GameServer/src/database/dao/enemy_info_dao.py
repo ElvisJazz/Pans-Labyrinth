@@ -12,7 +12,7 @@ class EnemyInfoDao(BaseDao):
     def get_dict_by_player_id(self):
         cursor = self.conn.cursor()
         cursor.execute('select a.enemy_id, a.enemy_type_id, a.health, b.max_health, a.position_x, a.position_y, '
-                            'a.position_z, b.hurt, b.experience from enemy_record a, enemy_type_config b '
+                            'a.position_z, b.hurt, b.experience, b.attack_distance from enemy_record a, enemy_type_config b '
                             'where a.player_id = ? and a.enemy_type_id=b.type_id order by a.enemy_id', (self.player_id,))
         d = self.data_to_dict(cursor.fetchall())
         cursor.close()
@@ -49,6 +49,6 @@ class EnemyInfoDao(BaseDao):
         id = -1
         if len(data_list) > 0:
             for data in data_list:
-                enemy_info_dict[data[0]] = EnemyInfo(data[0],data[1],data[2],data[3],(data[4],data[5],data[6]),data[7],data[8])
+                enemy_info_dict[data[0]] = EnemyInfo(data[0],data[1],data[2],data[3],(data[4],data[5],data[6]),data[7],data[8],data[9])
             id = data_list[-1][0]
         return enemy_info_dict, id

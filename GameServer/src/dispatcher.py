@@ -56,7 +56,7 @@ class Dispatcher(object):
                     raise "Please login!"
                 if mfc.target_type == MessageTargetType.PLAYER:
                     game_manager.player_manager.update(mfc)
-                    game_manager.enemy_manager.update_client_enemy()
+                    game_manager.enemy_manager.update_client_enemy_routine()
                 elif mfc.target_type == MessageTargetType.WEAPON:
                     game_manager.weapon_manager.update(mfc)
                 elif mfc.target_type == MessageTargetType.ENEMY:

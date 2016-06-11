@@ -3,14 +3,15 @@
 # Author: Elvis Jia
 # Date: 2016.5.28
 # ======================================================================
-import threading
+
+from __future__ import division
+import math
 from constant.enemy_action_type import EnemyActionType
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
 from database.bl.enemy_config_info_bl import EnemyConfigInfoBL
 from database.bl.enemy_info_bl import EnemyInfoBL
 from info.enemy_info import EnemyInfo
-from manager.game.player_manager import PlayerManager
 from message_from_client.enemy_mfc import EnemyMessageFromClient
 import manager.manager_online
 import dispatcher
@@ -53,7 +54,8 @@ class EnemyManager(object):
         # generate routine
         target_pos = self.transfer_player_pos_to_target_pos()
         for enemy in self._alive_enemy_dict.values():
-            enemy.target_routine = self.get_enemy_routine(enemy.position, target_pos)
+            start_pos = self.transfer_enemy_pos_to_start_pos(enemy.position)
+            enemy.target_routine = self.get_enemy_routine(start_pos, target_pos)
 
 
 
@@ -61,11 +63,21 @@ class EnemyManager(object):
         """ update enemy info """
         if isinstance(enemy_mfc, EnemyMessageFromClient):
             id = enemy_mfc.get_enemy_id()
+            # message from client is for single enemy
             if id != -1:
-                enemy_mfc.set_enemy_info(self._alive_enemy_dict[id])
+                enemy = self._alive_enemy_dict[id]
+                enemy_mfc.set_enemy_info(enemy)
                 # if enemy is dead, pop it from dead dict to living list
                 if self._alive_enemy_dict[id].health <= 0:
                     self._dead_enemy_list.append(self._alive_enemy_dict.pop(id))
+                else:
+                    # update enemy state, mainly for attack action
+                    start_pos = self.transfer_enemy_pos_to_start_pos(enemy.position)
+                    target_pos = self.transfer_player_pos_to_target_pos()
+                    self.__set_enemy_state(enemy, start_pos, target_pos)
+            # message from client is for enemy list, mainly for planing new routines
+            else:
+                enemy_mfc.set_enemy_list(self._alive_enemy_dict)
 
     def generate(self):
         """ send enemy info to client """
@@ -83,7 +95,7 @@ class EnemyManager(object):
         """ generate new enemies in fixed time """
         if self._game_manager.is_running :
             # Create enemy list according to config list
-            if len(self._alive_enemy_dict)<self._max_enemies:
+            if len(self._alive_enemy_dict) < self._max_enemies:
                 # get player position
                 target_pos = self.transfer_player_pos_to_target_pos()
                 self._id += 1
@@ -92,9 +104,10 @@ class EnemyManager(object):
                     for i in range(config.amount):
                         pos = self._game_manager.scene_manager.get_next_enemy_spawner()
                         enemy = EnemyInfo(self._id, config.type_id, config.max_health, config.max_health, pos, config.hurt,
-                                          config.experience)
+                                          config.experience, config.attack_distance)
                         # set routine
-                        enemy.target_routine = self.get_enemy_routine(enemy.position, target_pos)
+                        start_pos = self.transfer_enemy_pos_to_start_pos(enemy.position)
+                        enemy.target_routine = self.get_enemy_routine(start_pos, target_pos)
                         self._alive_enemy_dict[self._id] = enemy
                         enemy_list.append(enemy)
                         self._id += 1
@@ -104,48 +117,69 @@ class EnemyManager(object):
             # self._time.start()
             print "hh"
 
-    def get_enemy_routine(self, enemy_position, target_pos):
-        start_pos = (int(enemy_position[0]//self._maze_width),int(enemy_position[2]//self._maze_height))
+    def get_enemy_routine(self, start_pos, target_pos):
         routine = self._routine_generator.get_routine(start_pos, target_pos)
         r_routine = []
         for pos in routine:
             r_pos = Position(pos[1]*self._maze_width, 0, pos[0]*self._maze_height)
             r_routine.append(r_pos)
-
+        if len(r_routine) > 0:
+            r_routine.pop()
+            r_routine.append(self.transfer_pos_tuple_to_position_type(self._game_manager.player_manager.player_info.position))
         return r_routine
 
     def transfer_player_pos_to_target_pos(self):
         """ transfer player real position to target position for enemy routine generation"""
         player_position = self._game_manager.player_manager.player_info.position
         player_position = self.fix_negative_pos(player_position)
-        return int(player_position[0]//self._maze_width), int(player_position[2]//self._maze_height)
+        return int(round(player_position[0]/self._maze_width)), int(round(player_position[2]/self._maze_height))
+
+    def transfer_enemy_pos_to_start_pos(self, enemy_position):
+        """ transfer enemy real position to start position for enemy routine generation"""
+        enemy_position = self.fix_negative_pos(enemy_position)
+        return int(round(enemy_position[0]/self._maze_width)), int(round(enemy_position[2]/self._maze_height))
 
     def fix_negative_pos(self, pos):
         """ if pos(size = 3) has one or more negative component  """
         r_pos = []
-        for i in range(0,3):
+        for i in range(0, 3):
             x = pos[i] if pos[i] > 0 else 0
             r_pos.append(x)
         return r_pos
 
-    def update_client_enemy(self):
-        """ update enemy info to client """
+    def update_client_enemy_routine(self):
+        """ update enemy info to client, mainly routines """
         socket = manager.manager_online.OnlineManager.socket_buffer[self._player_id]
-        self.set_enemy_state()
+        self.__set_enemies_state()
         message = EnemyMessageToClient(MessageType.UPDATE, MessageTargetType.ENEMY, self._alive_enemy_dict.values())
         dispatcher.Dispatcher.send(socket, message)
 
-    def set_enemy_state(self):
+    def __set_enemies_state(self):
         """  set routine and action of enemy """
         target_pos = self.transfer_player_pos_to_target_pos()
         for enemy in self._alive_enemy_dict.values():
-            r_routine = self.get_enemy_routine(enemy.position, target_pos)
-            # if position of player is equal to the enemy ,attack!
-            if len(r_routine) == 0:
-                r_routine.append(self._game_manager.player_manager.player_info.position)
-                enemy.action_type = EnemyActionType.ATTACK
-                enemy.target_routine = r_routine
-            else:
-                enemy.action_type = EnemyActionType.RUN
-                enemy.target_routine = r_routine
+            start_pos = self.transfer_enemy_pos_to_start_pos(enemy.position)
+            self.__set_enemy_state(enemy, start_pos, target_pos)
 
+    def __set_enemy_state(self, enemy, start_pos, target_pos):
+        r_routine = self.get_enemy_routine(start_pos, target_pos)
+        # if position of player is equal to the enemy ,attack!
+        if len(r_routine) == 0 or self.in_attack_distance_between_enemy_and_player(enemy):
+            r_routine.append(self.transfer_pos_tuple_to_position_type(self._game_manager.player_manager.player_info.position))
+            enemy.action_type = EnemyActionType.ATTACK
+            enemy.target_routine = r_routine
+        else:
+            enemy.action_type = EnemyActionType.RUN
+            enemy.target_routine = r_routine
+
+    def transfer_pos_tuple_to_position_type(self, pos):
+        """
+        :param pos:(0,1,2)
+        :return:position: x=0, y=1, z=2
+        """
+        return Position(pos[0], pos[1], pos[2])
+
+    def in_attack_distance_between_enemy_and_player(self, enemy):
+        pos1 = self._game_manager.player_manager.player_info.position
+        pos2 = enemy.position
+        return math.pow(pos1[0]-pos2[0],2)+math.pow(pos1[1]-pos2[1],2) <= enemy.attack_distance_square

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemyManager : MonoBehaviour {
 	// Enemy prefabs
@@ -19,8 +20,11 @@ public class EnemyManager : MonoBehaviour {
 			eHealth.Health = ei.health;
 			eHealth.exp = ei.experience;
 			eHealth.MaxHealth = ei.max_health;
+			eHealth.EnemyId = ei.enemy_id;
 			eAttack.HurtAmount = ei.hurt;
-			eMover.Routine = ei.target_routine;
+			eAttack.HurtDistanceSquare = ei.attack_distance_square;
+			eMover.EnemyId = ei.enemy_id;
+			SetRoutine(eMover.Routine, ei.target_routine, ei.action_type);
 			enemy.transform.parent = transform;
 			// Set state
 			SetState(ei.action_type, eState);
@@ -29,28 +33,45 @@ public class EnemyManager : MonoBehaviour {
 		}
 	}
 
-	// Update enemies
+	// Update enemies of client
 	public void UpdateClientEnemy(EnemyMessageFromServer em){
 		foreach (EnemyInfo ei in em.enemy_info_list) {
 			GameObject enemy = enemy_table [ei.enemy_id] as GameObject;
 			EnemyMover eMover = enemy.GetComponent<EnemyMover> ();
 			EnemyState eState = enemy.GetComponent<EnemyState> ();
 			// Set properties
-			eMover.Routine = ei.target_routine;
+			SetRoutine(eMover.Routine, ei.target_routine, ei.action_type);
 			// Set state
 			SetState(ei.action_type, eState);
 		}
 	}
 
-	// Update server enemy information
-	public static void UpdateServerEnemy(){
-		EnemyMessageToServer em = new EnemyMessageToServer (MessageConstant.Type.UPDATE.GetHashCode(),MessageConstant.TargetType.ENEMY.GetHashCode (),
-		if (lastPM != null && lastPM.CheckEqual(pm)) {
-			return;
+	// Update server enemy information if the enemy reach the target position or die
+	public void UpdateSignleServerEnemy(int enemy_id){
+		if(enemy_table.ContainsKey(enemy_id)){
+			GameObject enemy = enemy_table [enemy_id] as GameObject;
+			EnemyHealth eHealth = enemy.GetComponent<EnemyHealth> ();
+			if (eHealth.Health <= 0)
+				enemy_table.Remove (enemy_id);
+			EnemyMessageToServer em = new EnemyMessageToServer (MessageConstant.Type.UPDATE.GetHashCode (), MessageConstant.TargetType.ENEMY.GetHashCode (), enemy_id, eHealth.Health, enemy.transform.position);
+			string message = JsonUtility.ToJson (em);
+			ClientSocket.GetInstance ().SendMessage (message+BaseMessage.END_MARK);
 		}
-		lastPM = pm;
-		string message = JsonUtility.ToJson (pm);
-		ClientSocket.GetInstance ().SendMessage (message+BaseMessage.END_MARK);
+	}
+
+	// Update server enemy information list if the position of player changes 
+	public string GetUpdateServerEnemyListMessage(){
+		EnemyListMessageToServer elm = new EnemyListMessageToServer (MessageConstant.Type.UPDATE.GetHashCode (), MessageConstant.TargetType.ENEMY.GetHashCode ());
+		// Add each enemy info to list of message
+		foreach (int enemy_id in enemy_table.Keys) {
+			GameObject enemy = enemy_table [enemy_id] as GameObject;
+			EnemyHealth eHealth = enemy.GetComponent<EnemyHealth> ();
+			EnemyMover eMover = enemy.GetComponent<EnemyMover> ();
+			Position position = eMover.Routine.Count > 0 ? eMover.Routine [0] : new Position(enemy.transform.position);
+			ServerEnemyMessage sm = new ServerEnemyMessage (enemy_id, eHealth.Health, position);
+			elm.enemy_info_list.Add (sm);
+		}
+		return JsonUtility.ToJson (elm) + BaseMessage.END_MARK;
 	}
 
 	// Set state
@@ -61,6 +82,22 @@ public class EnemyManager : MonoBehaviour {
 		}else{
 			eState.Attack = false;
 			eState.Run = true;
+		}
+	}
+
+	// Set routine
+	private void SetRoutine(List<Position> currentRoutine, List<Position> newRoutine, int action_type){
+		if (action_type == EnemyType.ActionType.ATTACK.GetHashCode ()) {
+			currentRoutine.Clear ();
+			currentRoutine.AddRange (newRoutine);
+		} else { //if (currentRoutine.Count > 0 && newRoutine.Count > 0) 
+			if (currentRoutine.Count > 0) {
+				newRoutine.Insert (0, currentRoutine [0]);
+				Position po = currentRoutine [0];
+				Debug.Log ("before:" + po.x+"||"+po.y+"||"+po.z);
+			}
+			currentRoutine.Clear();
+			currentRoutine.AddRange(newRoutine);
 		}
 	}
 }

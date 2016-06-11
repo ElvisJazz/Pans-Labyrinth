@@ -35,14 +35,17 @@ class GameHandler(asyncore.dispatcher_with_send):
         data = self.recv(4096)
         if data is None:
             return
-        elif data.endswith(MessageMark.END_MARK):
-            self.message += data
-            self.message = self.message[:-3]
-            # Handle message
-            Dispatcher.dispatch(self, self.message)
-            self.message = ""
         else:
             self.message += data
+            while True:
+                index = self.message.find(MessageMark.END_MARK)
+                if index != -1:
+                    handle_part = self.message[:index]
+                    # Handle message
+                    Dispatcher.dispatch(self, handle_part)
+                    self.message = self.message[index+len(MessageMark.END_MARK):]
+                else:
+                    break
 
     def handle_close(self):
         print("closed client: %s"% (repr(self.addr)))

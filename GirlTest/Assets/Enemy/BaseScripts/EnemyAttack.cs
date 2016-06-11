@@ -9,6 +9,8 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 
 public class EnemyAttack : MonoBehaviour {
+	// Hurt distance
+	public float HurtDistanceSquare = 0.64f;
 	// Hurt amount
 	public int HurtAmount = 10;
 	// Animator
@@ -21,8 +23,6 @@ public class EnemyAttack : MonoBehaviour {
 	protected PlayerHealth playerHealth;
 	// Is set attack state
 	protected bool isSetAttack = false;
-	// Is player in attack range
-	protected bool isInAttackRange = false;
 
 	// Use this for initialization
 	void Start () {
@@ -46,21 +46,9 @@ public class EnemyAttack : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(state.Attack)
+			Attack (playerHealth.transform.position);
 		ResetAttackState ();
-	}
-
-	// Check collider
-	void OnTriggerStay(Collider other){
-		if (other.gameObject.name == "Player" && state.Active) {
-			isInAttackRange = true;
-			Attack (other.gameObject.transform.position);
-		}
-	}
-
-	void OnTriggerExit(Collider other){
-		if (other.gameObject.name == "Player" && state.Active) {
-			isInAttackRange = false;
-		}
 	}
 
 	// Attack
@@ -75,9 +63,14 @@ public class EnemyAttack : MonoBehaviour {
 		
 	// Check attack whether hurt the player
 	public void CheckHurt(){
-		if (isInAttackRange) {
+		if (IsInHurtDistanceSquare()) {
 			playerHealth.GetHurt (HurtAmount);
 		}
+	}
+
+	// whether the distance between enemy and player is in range
+	public bool IsInHurtDistanceSquare(){
+		return Mathf.Pow (playerHealth.transform.position [0]-transform.position[0], 2) + Mathf.Pow (playerHealth.transform.position [2]-transform.position[2], 2) <= HurtDistanceSquare;
 	}
 
 

@@ -29,6 +29,7 @@ class EnemyMessageToClient(object):
                     e.experience = enemy_info.experience
                     e.target_routine = enemy_info.target_routine
                     e.action_type = enemy_info.action_type
+                    e.attack_distance_square = enemy_info.attack_distance_square
                 elif message_type == MessageType.UPDATE:
                     e.target_routine = enemy_info.target_routine
                     e.action_type = enemy_info.action_type

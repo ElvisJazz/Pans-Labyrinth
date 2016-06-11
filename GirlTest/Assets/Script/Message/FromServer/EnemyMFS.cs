@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 [Serializable]
 public struct Position{
-	public int x;
-	public int y;
-	public int z;
+	public float x;
+	public float y;
+	public float z;
+
+	public Position(Vector3 pos){
+		this.x = pos.x;
+		this.y = pos.y;
+		this.z = pos.z;
+	}
 }
 
 [Serializable]
@@ -29,6 +36,8 @@ public struct EnemyInfo{
 	public List<Position> target_routine;
 	// Action type
 	public int action_type;
+	// Hurt disatnce square
+	public float attack_distance_square;
 }
 
 [Serializable]

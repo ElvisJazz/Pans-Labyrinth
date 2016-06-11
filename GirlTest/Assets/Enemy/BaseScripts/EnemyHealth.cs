@@ -8,6 +8,16 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class EnemyHealth : MonoBehaviour {
+	// Enemy id
+	int enemyId;
+	public int EnemyId {
+		get{
+			return enemyId;
+		}
+		set{
+			enemyId = value;
+		}
+	}
 	// Max Health
 	public int MaxHealth = 100;
 	// Health
@@ -40,6 +50,8 @@ public class EnemyHealth : MonoBehaviour {
 	public float SinkSpeed = 2.5f;
 	// Animator state
 	static int damageState = Animator.StringToHash("Base Layer.Block_hit");
+	// Enemy manager
+	EnemyManager enemyManager = null;
 
 	// Use this for initialization
 	protected void Start () {
@@ -60,6 +72,11 @@ public class EnemyHealth : MonoBehaviour {
 		GameObject player = GameObject.Find("Player");
 		if (player != null) {
 			playerExp = player.GetComponent<PlayerExp> ();
+		}
+		// Init enmey manager
+		GameObject enemySpwaner = GameObject.Find("EnemySpawner");
+		if (enemySpwaner != null) {
+			enemyManager = enemySpwaner.GetComponent<EnemyManager> ();
 		}
 	}
 
@@ -89,6 +106,7 @@ public class EnemyHealth : MonoBehaviour {
 
 	// Die
 	void Die(){
+		enemyManager.UpdateSignleServerEnemy (enemyId);
 		playerExp.AddExp (exp);
 		isDead = true;
 		enemyAnimator.SetTrigger ("Die");

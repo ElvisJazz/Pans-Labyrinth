@@ -75,7 +75,7 @@ public class BulletEffect : MonoBehaviour {
 			if (hitInfo.collider != null) {
 				bool useEffect = true;
 				// Set the enemy damge if shoot the enemy
-				if (hitInfo.collider.CompareTag ("Enemy")) {
+				if (!hitInfo.collider.isTrigger && hitInfo.collider.CompareTag ("Enemy")) {
 					EnemyHealth enemyHealth = hitInfo.collider.gameObject.GetComponent<EnemyHealth> ();
 					EnemyState enemyState = hitInfo.collider.gameObject.GetComponent<EnemyState> ();
 					if (enemyState != null && enemyState.Active && enemyHealth != null) {
