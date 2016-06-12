@@ -7,11 +7,13 @@ public class WeaponInfoController : MonoBehaviour {
 	[System.Serializable]
 	public struct WeaponDetail{
 		public string name;
+		public int id;
 		public int currentAmountInGun;
 		public int currentAmountInBag;
 
-		public WeaponDetail(string name, int currentAmountInGun, int currentAmountInBag){
+		public WeaponDetail(string name, int id, int currentAmountInGun, int currentAmountInBag){
 			this.name = name;
+			this.id = id;
 			this.currentAmountInGun = currentAmountInGun;
 			this.currentAmountInBag = currentAmountInBag;
 		}
@@ -45,9 +47,7 @@ public class WeaponInfoController : MonoBehaviour {
 	// Visibility of weapon info 
 	bool isVisible = false;
 	// Visibility of weapon container
-	bool isContainerVisible = false;
-	// Escape press
-	bool isEscPress = false;
+	public static bool isContainerVisible = false;
 	// Has displayed information
 	bool hasDisplay = false;
 	// Current time of displaying information
@@ -108,7 +108,6 @@ public class WeaponInfoController : MonoBehaviour {
 			ResetInfoText ();
 		}
 
-		UpdateCursor ();
 	}
 
 	// Set visibility of weapon info
@@ -202,16 +201,9 @@ public class WeaponInfoController : MonoBehaviour {
 		}
 	}
 
-	// Update visibility of curson
-	void UpdateCursor(){
-		if (Input.GetKeyDown (KeyCode.Escape)) {
-			Cursor.visible = true;
-			isEscPress = true;
-		} else if (!isEscPress && !isContainerVisible && Cursor.visible) {
-			Cursor.visible = false;
-		} else if (isEscPress && Input.GetMouseButtonDown (0)) {
-			Cursor.visible = false;
-			isEscPress = false;
-		}
+	// Get weapons list
+	public ICollection<WeaponDetail> GetWeaponList(){
+		return (ICollection<WeaponDetail>)weaponsInBag.Values;
 	}
+
 }

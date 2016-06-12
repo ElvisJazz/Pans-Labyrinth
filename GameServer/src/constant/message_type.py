@@ -13,3 +13,4 @@ class MessageType(object):
     CREATE = 3
     UPDATE = 4
     SAVE = 7
+    ERROR = 8

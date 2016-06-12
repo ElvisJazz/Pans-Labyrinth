@@ -5,7 +5,7 @@
 # ======================================================================
 
 
-class RegisterAndLoginMessage(object):
+class SystemMessage(object):
 
     def __init__(self, message_type="", target_type="", sequence_id=0):
         self.message_type = message_type

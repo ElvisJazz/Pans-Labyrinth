@@ -7,7 +7,8 @@
 		UPDATE = 4,
 		RUN = 5, 
 		ATTACK = 6,
-		SAVE = 7
+		SAVE = 7,
+		ERROR = 8
 	}
 
 	public enum TargetType{

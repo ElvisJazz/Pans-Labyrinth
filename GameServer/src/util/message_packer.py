@@ -8,7 +8,7 @@ import json
 from constant.message_mark import MessageMark
 from message_from_client.enemy_mfc import EnemyMessageFromClient
 from message_from_client.player_mfc import PlayerMessageFromClient
-from message_from_client.register_login_mfc import RegisterAndLoginMessageFromClient
+from message_from_client.system_mfc import SystemMessageFromClient
 from message_from_client.weapon_mfc import WeaponMessageFromClient
 from constant.message_target_type import MessageTargetType
 
@@ -21,7 +21,7 @@ class MessagePacker(object):
         mfc = None
         # System message from client
         if dic['target_type'] == MessageTargetType.SYSTEM:
-            mfc = RegisterAndLoginMessageFromClient()
+            mfc = SystemMessageFromClient()
         # Player message from client
         elif dic['target_type'] == MessageTargetType.PLAYER:
             mfc = PlayerMessageFromClient()

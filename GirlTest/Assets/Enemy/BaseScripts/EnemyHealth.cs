@@ -110,6 +110,9 @@ public class EnemyHealth : MonoBehaviour {
 		playerExp.AddExp (exp);
 		isDead = true;
 		enemyAnimator.SetTrigger ("Die");
+		EnemyState state = GetComponent<EnemyState> ();
+		state.Run = state.Attack = false;
+		state.Active = false;
 	}
 
 	// Update enemy health reference of info controller 

@@ -61,7 +61,7 @@ public class CameraController : MonoBehaviour
 	}
 
 	// Set usual view
-	void SetCameraPositionNormalView(){
+	public void SetCameraPositionNormalView(){
 		SetMainBodyVisible (true);
 		SetWeaponPartVisible (false);
 		weaponInfoController.SetWeaponInfoVisible (false);

@@ -10,18 +10,29 @@ public class PlayerManager{
 	private static PlayerExp playerExp = GameObject.Find("Player").GetComponent<PlayerExp>();
 	// Enemy manager script
 	private static EnemyManager enemyManager = GameObject.Find("EnemySpawner").GetComponent<EnemyManager>();
+
+	// Init
+	public static void Init(){
+		playerHealth = GameObject.Find("Player").GetComponent<PlayerHealth>();
+		playerExp = GameObject.Find("Player").GetComponent<PlayerExp>();
+		enemyManager = GameObject.Find("EnemySpawner").GetComponent<EnemyManager>();
+	}
+
 	// Update client player information
 	public static void UpdateClientPlayer(PlayerMessageFromServer pm){
+		playerExp.transform.position = new Vector3 (pm.position [0], pm.position [1], pm.position [2]);
 		playerHealth.Health = pm.health;
 		playerHealth.MaxHealth = pm.max_health;
+		playerHealth.DeadNum = pm.dead_num;
 		playerExp.Exp = pm.experience;
 		playerExp.MaxExp = pm.max_experience;
+		playerExp.Level = pm.level;
 	}
 
 	// Update server player information and send current state of all enemies
-	public static void UpdateServerPlayer(){
-		PlayerMessageToServer pm = new PlayerMessageToServer (MessageConstant.Type.UPDATE.GetHashCode(),MessageConstant.TargetType.PLAYER.GetHashCode (), playerHealth.transform.position, playerHealth.Health, playerExp.Exp);
-		if (lastPM != null && lastPM.CheckEqual(pm)) {
+	public static void UpdateServerPlayer(bool isAll=false){
+		PlayerMessageToServer pm = new PlayerMessageToServer (MessageConstant.Type.UPDATE.GetHashCode(),MessageConstant.TargetType.PLAYER.GetHashCode (), playerHealth.transform.position, playerHealth.Health, playerExp.Exp, playerHealth.DeadNum);
+		if (!isAll && lastPM != null && lastPM.CheckEqual(pm)) {
 			return;
 		}
 		lastPM = pm;

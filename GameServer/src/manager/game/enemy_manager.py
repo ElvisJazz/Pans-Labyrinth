@@ -6,11 +6,13 @@
 
 from __future__ import division
 import math
+import threading
 from constant.enemy_action_type import EnemyActionType
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
 from database.bl.enemy_config_info_bl import EnemyConfigInfoBL
 from database.bl.enemy_info_bl import EnemyInfoBL
+from database.dbcp_manager import DBCPManager
 from info.enemy_info import EnemyInfo
 from message_from_client.enemy_mfc import EnemyMessageFromClient
 import manager.manager_online
@@ -24,19 +26,19 @@ class EnemyManager(object):
     def __init__(self, player_id, game_manager):
         self._game_manager = game_manager
         self._player_id = player_id
-        self._enemy_config_list = []
+        self.enemy_config_list = []
         self._alive_enemy_dict = {}
         self._dead_enemy_list = []
         self._id = 0
         self._time = None
-        self._max_enemies = 40
+        self._max_enemies = 10
 
     def save(self):
         """save the information of enemy"""
         enemy_info_bl = EnemyInfoBL(self._player_id, None, True)
-        flag = enemy_info_bl.update_dict(self._alive_enemy_dict)
-        flag |= enemy_info_bl.delete_list(self._dead_enemy_list)
-        return flag
+        enemy_info_bl.update_dict(self._alive_enemy_dict)
+        enemy_info_bl.delete_list(self._dead_enemy_list)
+        return True
 
     def load(self):
         """load the information of enemy"""
@@ -72,9 +74,14 @@ class EnemyManager(object):
                     self._dead_enemy_list.append(self._alive_enemy_dict.pop(id))
                 else:
                     # update enemy state, mainly for attack action
-                    start_pos = self.transfer_enemy_pos_to_start_pos(enemy.position)
+                    start_pos = self.transfer_enemy_pos_to_start_pos(enemy.next_position)
                     target_pos = self.transfer_player_pos_to_target_pos()
                     self.__set_enemy_state(enemy, start_pos, target_pos)
+                    # send the enemy respond
+                    socket = manager.manager_online.OnlineManager.socket_buffer[self._player_id]
+                    l = [enemy]
+                    message = EnemyMessageToClient(MessageType.UPDATE, MessageTargetType.ENEMY, l)
+                    dispatcher.Dispatcher.send(socket, message)
             # message from client is for enemy list, mainly for planing new routines
             else:
                 enemy_mfc.set_enemy_list(self._alive_enemy_dict)
@@ -113,9 +120,14 @@ class EnemyManager(object):
                         self._id += 1
                 # Send to client
                 self._generate_enemy_list(enemy_list)
-            # self._time = threading.Timer(60, self.generate_in_time)
-            # self._time.start()
-            print "hh"
+                # Need new conn to save because SQLite3 can only use the same connection in the same thread for safe
+                conn = DBCPManager.get_connection()
+                EnemyInfoBL(self._player_id, conn).add_list(enemy_list)
+                conn.commit()
+                conn.close()
+            self._time = threading.Timer(60, self.generate_in_time)
+            self._time.start()
+            print "hh1"
 
     def get_enemy_routine(self, start_pos, target_pos):
         routine = self._routine_generator.get_routine(start_pos, target_pos)
@@ -142,9 +154,12 @@ class EnemyManager(object):
     def fix_negative_pos(self, pos):
         """ if pos(size = 3) has one or more negative component  """
         r_pos = []
-        for i in range(0, 3):
-            x = pos[i] if pos[i] > 0 else 0
-            r_pos.append(x)
+        try:
+            for i in range(0, 3):
+                x = pos[i] if pos[i] > 0 else 0
+                r_pos.append(x)
+        except Exception,e:
+            print e
         return r_pos
 
     def update_client_enemy_routine(self):
@@ -158,14 +173,16 @@ class EnemyManager(object):
         """  set routine and action of enemy """
         target_pos = self.transfer_player_pos_to_target_pos()
         for enemy in self._alive_enemy_dict.values():
-            start_pos = self.transfer_enemy_pos_to_start_pos(enemy.position)
+            enemy_pos = enemy.next_position if enemy.next_position is not None else enemy.position
+            start_pos = self.transfer_enemy_pos_to_start_pos(enemy_pos)
             self.__set_enemy_state(enemy, start_pos, target_pos)
 
     def __set_enemy_state(self, enemy, start_pos, target_pos):
         r_routine = self.get_enemy_routine(start_pos, target_pos)
         # if position of player is equal to the enemy ,attack!
-        if len(r_routine) == 0 or self.in_attack_distance_between_enemy_and_player(enemy):
+        if len(r_routine) == 0:
             r_routine.append(self.transfer_pos_tuple_to_position_type(self._game_manager.player_manager.player_info.position))
+        if self.in_attack_distance_between_enemy_and_player(enemy):
             enemy.action_type = EnemyActionType.ATTACK
             enemy.target_routine = r_routine
         else:
@@ -182,4 +199,4 @@ class EnemyManager(object):
     def in_attack_distance_between_enemy_and_player(self, enemy):
         pos1 = self._game_manager.player_manager.player_info.position
         pos2 = enemy.position
-        return math.pow(pos1[0]-pos2[0],2)+math.pow(pos1[1]-pos2[1],2) <= enemy.attack_distance_square
+        return math.pow(pos1[0]-pos2[0],2)+math.pow(pos1[2]-pos2[2],2) <= enemy.attack_distance_square

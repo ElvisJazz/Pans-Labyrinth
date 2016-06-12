@@ -40,7 +40,9 @@ class OnlineManager(object):
                 raise Exception("Failed to save game data. Please try again!")
             # remove socket from DBCPManager
             DBCPManager.close_conn(game_manager.player_id)
-            return True;
+            cls.socket_buffer.pop(game_manager.player_id)
+            cls.manager_buffer.pop(socket)
+            return True
 
     @classmethod
     def get_game_manager(cls, socket):

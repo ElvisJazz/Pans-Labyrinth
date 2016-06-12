@@ -12,7 +12,7 @@ class PlayerInfoDao(BaseDao):
     def get_by_id(self):
         cursor = self.conn.cursor()
         cursor.execute('select a.player_id, b.type_id, b.level, a.position_x, a.position_y, a.position_z, a.health, b.max_health,'
-                            'a.experience, b.max_experience from player_record a, player_type_config b where '
+                            'a.experience, b.max_experience, a.dead_num from player_record a, player_type_config b where '
                             'a.player_id=? and a.player_type_id=b.type_id', (self.player_id,))
         o = self.data_to_object(cursor.fetchone())
         cursor.close()
@@ -21,8 +21,8 @@ class PlayerInfoDao(BaseDao):
     def insert(self, player_info):
         cursor = self.conn.cursor()
         cursor.execute('insert into player_record (player_id, player_type_id, health, experience, position_x, position_y, '
-                            'position_z) values (?, ?, ?, ?, ?, ?, ?)', (player_info.player_id, player_info.type_id, player_info.health,
-                            player_info.experience, player_info.position[0], player_info.position[1], player_info.position[2],))
+                            'position_z, dead_num) values (?, ?, ?, ?, ?, ?, ?, ?)', (player_info.player_id, player_info.type_id, player_info.health,
+                            player_info.experience, player_info.position[0], player_info.position[1], player_info.position[2], player_info.dead_num,))
         r = cursor.rowcount
         cursor.close()
         return r
@@ -30,8 +30,8 @@ class PlayerInfoDao(BaseDao):
     def update(self, player_info):
         cursor = self.conn.cursor()
         cursor.execute('update player_record set player_type_id=?, health=?, experience=?, position_x=?, position_y=?,'
-                            'position_z=? where player_id=?', (player_info.type_id, player_info.health, player_info.experience,
-                             player_info.position[0], player_info.position[1], player_info.position[2], player_info.player_id,))
+                            'position_z=? , dead_num=? where player_id=?', (player_info.type_id, player_info.health, player_info.experience,
+                             player_info.position[0], player_info.position[1], player_info.position[2], player_info.dead_num, player_info.player_id,))
         r = cursor.rowcount
         cursor.close()
         return r
@@ -46,5 +46,5 @@ class PlayerInfoDao(BaseDao):
     def data_to_object(self, data_tuple):
         if len(data_tuple) > 0:
             return PlayerInfo(data_tuple[0],data_tuple[1],data_tuple[2],(data_tuple[3],data_tuple[4],data_tuple[5]),data_tuple[6],
-                          data_tuple[7],data_tuple[8],data_tuple[9])
+                          data_tuple[7],data_tuple[8],data_tuple[9],data_tuple[10])
         return None

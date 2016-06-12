@@ -22,7 +22,7 @@ public class EnemyManager : MonoBehaviour {
 			eHealth.MaxHealth = ei.max_health;
 			eHealth.EnemyId = ei.enemy_id;
 			eAttack.HurtAmount = ei.hurt;
-			eAttack.HurtDistanceSquare = ei.attack_distance_square;
+			EnemyAttack.HurtDistanceSquare = ei.attack_distance_square;
 			eMover.EnemyId = ei.enemy_id;
 			SetRoutine(eMover.Routine, ei.target_routine, ei.action_type);
 			enemy.transform.parent = transform;
@@ -37,12 +37,14 @@ public class EnemyManager : MonoBehaviour {
 	public void UpdateClientEnemy(EnemyMessageFromServer em){
 		foreach (EnemyInfo ei in em.enemy_info_list) {
 			GameObject enemy = enemy_table [ei.enemy_id] as GameObject;
-			EnemyMover eMover = enemy.GetComponent<EnemyMover> ();
-			EnemyState eState = enemy.GetComponent<EnemyState> ();
-			// Set properties
-			SetRoutine(eMover.Routine, ei.target_routine, ei.action_type);
-			// Set state
-			SetState(ei.action_type, eState);
+			if (enemy != null) {
+				EnemyMover eMover = enemy.GetComponent<EnemyMover> ();
+				EnemyState eState = enemy.GetComponent<EnemyState> ();
+				// Set properties
+				SetRoutine (eMover.Routine, ei.target_routine, ei.action_type);
+				// Set state
+				SetState (ei.action_type, eState);
+			}
 		}
 	}
 
@@ -51,9 +53,11 @@ public class EnemyManager : MonoBehaviour {
 		if(enemy_table.ContainsKey(enemy_id)){
 			GameObject enemy = enemy_table [enemy_id] as GameObject;
 			EnemyHealth eHealth = enemy.GetComponent<EnemyHealth> ();
+			EnemyMover eMover = enemy.GetComponent<EnemyMover> ();
 			if (eHealth.Health <= 0)
 				enemy_table.Remove (enemy_id);
-			EnemyMessageToServer em = new EnemyMessageToServer (MessageConstant.Type.UPDATE.GetHashCode (), MessageConstant.TargetType.ENEMY.GetHashCode (), enemy_id, eHealth.Health, enemy.transform.position);
+			Position next_position = new Position(enemy.transform.position); // eMover.Routine.Count > 0 ? eMover.Routine [0] : 
+			EnemyMessageToServer em = new EnemyMessageToServer (MessageConstant.Type.UPDATE.GetHashCode (), MessageConstant.TargetType.ENEMY.GetHashCode (), enemy_id, eHealth.Health, enemy.transform.position, next_position);
 			string message = JsonUtility.ToJson (em);
 			ClientSocket.GetInstance ().SendMessage (message+BaseMessage.END_MARK);
 		}
@@ -67,8 +71,9 @@ public class EnemyManager : MonoBehaviour {
 			GameObject enemy = enemy_table [enemy_id] as GameObject;
 			EnemyHealth eHealth = enemy.GetComponent<EnemyHealth> ();
 			EnemyMover eMover = enemy.GetComponent<EnemyMover> ();
-			Position position = eMover.Routine.Count > 0 ? eMover.Routine [0] : new Position(enemy.transform.position);
-			ServerEnemyMessage sm = new ServerEnemyMessage (enemy_id, eHealth.Health, position);
+			Position position = new Position(enemy.transform.position);
+			Position next_position = new Position(enemy.transform.position); // eMover.Routine.Count > 0 ? eMover.Routine [0] : 
+			ServerEnemyMessage sm = new ServerEnemyMessage (enemy_id, eHealth.Health, position, next_position);
 			elm.enemy_info_list.Add (sm);
 		}
 		return JsonUtility.ToJson (elm) + BaseMessage.END_MARK;

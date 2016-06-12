@@ -21,11 +21,11 @@ public class MonsterAttack : EnemyAttack {
 	override protected void Attack(Vector3 pos){
 		mover.TurnToTarget (pos);
 		anim.SetTrigger ("Combat_idle");
-		if (playerHealth.Health>0 && !isSetAttack && anim.GetCurrentAnimatorStateInfo(0).fullPathHash == combatIdleState && !anim.IsInTransition(0)) {
+		if (playerHealth.Health>0 && anim.GetCurrentAnimatorStateInfo(0).fullPathHash == combatIdleState && !anim.IsInTransition(0)) {
 			Random.seed = Mathf.CeilToInt(Time.time * 100f);
 			int type = Random.Range (0, attackType.Length);
 			anim.SetTrigger (attackType [type]);
-			isSetAttack = true;
+			//isSetAttack = true;
 		}
 	}
 

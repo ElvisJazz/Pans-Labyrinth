@@ -42,7 +42,7 @@ public class ExpInfoController : MonoBehaviour {
 	// Update exp text
 	void UpdateExpText(){
 		if (playerExp != null) {
-			ExpText.text = playerExp.Exp + "/" + playerExp.MaxExp;
+			ExpText.text = playerExp.Exp + "/" + playerExp.MaxExp+"("+playerExp.Level+")";
 		}
 	}
 }

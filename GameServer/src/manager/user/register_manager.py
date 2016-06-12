@@ -18,8 +18,8 @@ from info.enemy_info import EnemyInfo
 from info.maze_info import MazeInfo
 from info.player_info import PlayerInfo
 from info.weapon_info import WeaponInfo
-from message_from_client.register_login_mfc import RegisterAndLoginMessageFromClient
 from info.user_info import UserInfo
+from message_from_client.system_mfc import SystemMessageFromClient
 from util.maze_generator import MazeGenerator
 
 
@@ -29,7 +29,7 @@ class RegisterManager(object):
     def register(cls, register_mfc):
         conn = None
         try:
-            if isinstance(register_mfc, RegisterAndLoginMessageFromClient):
+            if isinstance(register_mfc, SystemMessageFromClient):
                 user_info = UserInfo()
                 register_mfc.set_user_info(user_info)
                 conn = DBCPManager.get_connection()
@@ -70,7 +70,7 @@ class RegisterManager(object):
         player_config = player_config_bl.get_by_id(0)
         # Create player info record
         player_info = PlayerInfo(player_id, player_config.type_id, player_config.level, (0,0,0), player_config.max_health,
-                                 player_config.max_health, 0, player_config.max_experience)
+                                 player_config.max_health, 0, player_config.max_experience, 0)
         player_info_bl = PlayerInfoBL(player_id)
         player_info_bl.set_conn(conn)
         return player_info_bl.add_player(player_info)

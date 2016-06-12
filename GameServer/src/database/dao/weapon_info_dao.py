@@ -33,7 +33,7 @@ class WeaponInfoDao(BaseDao):
         cursor.execute('update weapon_record set take=?, current_bullets_in_gun=?, current_bullets_in_bag=?,'
                             'position_x=?, position_y=?, position_z=? where player_id=? and weapon_id=?',
                             (weapon_info.take, weapon_info.current_bullets_in_gun, weapon_info.current_bullets_in_bag,
-                             weapon_info.position[0], weapon_info.position[1],weapon_info.position[2],self.player_id, weapon_info.weapon_id,))
+                             weapon_info.weapon_position[0], weapon_info.weapon_position[1],weapon_info.weapon_position[2],self.player_id, weapon_info.weapon_id,))
         r = cursor.rowcount
         cursor.close()
         return r

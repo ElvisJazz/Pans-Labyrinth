@@ -42,7 +42,7 @@ public class WeaponSelector : Selectable {
 		}
 	}
 
-	// Set selected statellll
+	// Set selected state
 	public void SetSelectedState(bool selected){
 		ColorBlock colorBlock = new ColorBlock ();
 		colorBlock = base.colors;

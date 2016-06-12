@@ -22,6 +22,8 @@ class EnemyMessageFromClient(object):
                 enemy_info.health = self.health
             if hasattr(self, 'position'):
                 enemy_info.position = self.position
+            if hasattr(self,'next_position'):
+                enemy_info.next_position = self.next_position
         else:
             raise Exception("Instance of EnemyInfo is expected!")
 
@@ -35,6 +37,8 @@ class EnemyMessageFromClient(object):
                         enemy.health = enemy_info["health"]
                     if enemy_info.has_key('position'):
                         enemy.position = enemy_info["position"]
+                    if enemy_info.has_key('next_position'):
+                        enemy.next_position = enemy_info["next_position"]
             else:
                 raise Exception("Instance of List for enemy is expected!")
         else:

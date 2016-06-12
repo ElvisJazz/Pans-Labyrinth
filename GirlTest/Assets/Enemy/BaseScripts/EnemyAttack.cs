@@ -10,7 +10,7 @@ using System.Collections;
 
 public class EnemyAttack : MonoBehaviour {
 	// Hurt distance
-	public float HurtDistanceSquare = 0.64f;
+	public static float HurtDistanceSquare = 0.64f;
 	// Hurt amount
 	public int HurtAmount = 10;
 	// Animator
@@ -46,9 +46,9 @@ public class EnemyAttack : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//ResetAttackState ();
 		if(state.Attack)
 			Attack (playerHealth.transform.position);
-		ResetAttackState ();
 	}
 
 	// Attack
@@ -63,14 +63,14 @@ public class EnemyAttack : MonoBehaviour {
 		
 	// Check attack whether hurt the player
 	public void CheckHurt(){
-		if (IsInHurtDistanceSquare()) {
+		if (GetDistanceSquare(playerHealth.transform.position, transform.position) <= HurtDistanceSquare) {
 			playerHealth.GetHurt (HurtAmount);
 		}
 	}
 
-	// whether the distance between enemy and player is in range
-	public bool IsInHurtDistanceSquare(){
-		return Mathf.Pow (playerHealth.transform.position [0]-transform.position[0], 2) + Mathf.Pow (playerHealth.transform.position [2]-transform.position[2], 2) <= HurtDistanceSquare;
+	// Get the distance between enemy and player
+	public static float GetDistanceSquare(Vector3 pos1, Vector3 pos2){
+		return Mathf.Pow (pos1[0]-pos2[0], 2) + Mathf.Pow (pos1 [2]-pos2[2], 2);
 	}
 
 

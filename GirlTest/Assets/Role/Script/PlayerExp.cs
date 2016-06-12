@@ -3,7 +3,10 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerExp : MonoBehaviour {
-
+	// Animator
+	Animator playerAnimator;
+	// Level
+	public string Level = "";
 	// Player's exp
 	int exp = 0;
 	public int Exp {
@@ -33,6 +36,8 @@ public class PlayerExp : MonoBehaviour {
 		if (InfoManager != null) {
 			InfoManager.GetComponent<ExpInfoController> ()._PlayerExp = this;
 		}
+		// Get animator
+		playerAnimator = GetComponent<Animator>();
 	}
 
 	// Get hurt
@@ -45,7 +50,9 @@ public class PlayerExp : MonoBehaviour {
 
 	// Add level
 	void Promote(){
-		//gameController.GameOver ();
+		playerAnimator.SetTrigger ("Win");
+		PlayerManager.UpdateServerPlayer();
+		exp -= MaxExp;
 	}
 
 }

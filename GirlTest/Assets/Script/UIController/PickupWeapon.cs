@@ -12,7 +12,7 @@ public class PickupWeapon : MonoBehaviour {
 			if (infoManager != null) {
 				WeaponInfoController weaponInfoController = infoManager.GetComponent<WeaponInfoController> ();
 				weaponInfoController.AddNewWeaponInBag (WeaponDetail);
-				Destroy (this.gameObject);
+				Destroy (gameObject);
 			}
 		}
 	}

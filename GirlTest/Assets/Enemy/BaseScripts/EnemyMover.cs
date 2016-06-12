@@ -19,6 +19,8 @@ public class EnemyMover : MonoBehaviour {
 			enemyId = value;
 		}
 	}
+	// Player health controller
+	protected PlayerHealth playerHealth;
 	// Speed
 	public float Speed = 5f;
 	// Animator
@@ -37,16 +39,25 @@ public class EnemyMover : MonoBehaviour {
 			routine = value;
 		}
 	}
+	// Constant positon
+	public readonly Vector3 NONE_POSITION = new Vector3(-100,-100,-100); 
+	// Current target position
+	private Vector3 currentTargetPosition;
 
 	// Use this for initialization
 	void Start () {
+		currentTargetPosition = NONE_POSITION;
 		animator = GetComponent<Animator> ();
 		enemyState = GetComponent<EnemyState> ();
 		enemyManager = GameObject.Find ("EnemySpawner").GetComponent<EnemyManager> ();
+		playerHealth = GameObject.Find ("Player").GetComponent<PlayerHealth> ();
 	}
 
 	void Update() {
-		RunToTarget ();
+		if(enemyState.Run)
+			RunToTarget ();
+		else
+			animator.SetFloat ("Speed", 0);
 	}
 
 	// Turn to the target
@@ -59,20 +70,19 @@ public class EnemyMover : MonoBehaviour {
 	public bool RunToTarget(){
 		if (routine != null && routine.Count > 0) {
 			Vector3 pos = new Vector3 (routine [0].x, routine [0].y, routine [0].z);
-			if (pos == transform.position) {
+			if (routine.Count >1 && pos == transform.position) {
 				routine.RemoveAt (0);
 				if (routine.Count > 0)
 					pos = new Vector3 (routine [0].x, routine [0].y, routine [0].z);
-				else {
-					enemyManager.UpdateSignleServerEnemy (enemyId);
-					return true;
-				}
+			} else if(routine.Count <= 1 && EnemyAttack.GetDistanceSquare (transform.position, pos) <= EnemyAttack.HurtDistanceSquare-0.1){
+				enemyManager.UpdateSignleServerEnemy (enemyId);
+				return true;
 			}
 			TurnToTarget (pos);
 			// Set run state
 			animator.SetFloat ("Speed", Speed);
 			// Set position
-			transform.position = Vector3.MoveTowards(transform.position, pos, Speed * Time.fixedDeltaTime);
+			transform.position = Vector3.MoveTowards(transform.position, pos, Speed * Time.deltaTime);
 		} else {
 			animator.SetFloat ("Speed", 0);
 		}
@@ -80,6 +90,17 @@ public class EnemyMover : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision other){
-		Debug.Log ("hha");
+		if(other.gameObject.CompareTag("Enemy")){
+			EnemyMover enemyMover = other.gameObject.GetComponent<EnemyMover> ();
+			// give a way for the enemy which id is less
+			if (enemyMover.EnemyId < this.enemyId) {
+				//transform.Translate(0f, 0f, 1.0f);
+				Position pos = new Position(routine[0].x+0.5f, 0, routine[0].z);
+				routine [0] = pos;
+
+			}
+				
+		}
 	}
+
 }

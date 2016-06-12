@@ -5,6 +5,7 @@ from config.config_manager import ConfigManager
 from constant.message_mark import MessageMark
 from dispatcher import Dispatcher
 import asyncore, socket
+from manager.manager_online import OnlineManager
 from util.maze_generator import MazeCell
 
 
@@ -48,6 +49,10 @@ class GameHandler(asyncore.dispatcher_with_send):
                     break
 
     def handle_close(self):
+        game_manager = OnlineManager.get_game_manager(self)
+        if game_manager is not None:
+            game_manager.is_running = False
+        OnlineManager.remove_and_save_game_manager(self)
         print("closed client: %s"% (repr(self.addr)))
         self.close()
 

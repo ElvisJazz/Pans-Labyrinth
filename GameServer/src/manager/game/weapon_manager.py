@@ -3,6 +3,7 @@
 # Author: Elvis Jia
 # Date: 2016.5.28
 # ======================================================================
+import threading
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
 from database.bl.weapon_info_bl import WeaponInfoBL
@@ -13,9 +14,11 @@ import dispatcher
 
 
 class WeaponManager(object):
-    def __init__(self, player_id):
+    def __init__(self, player_id, game_manager):
+        self._game_manager = game_manager
         self._player_id = player_id
         self._weapon_dict = {}
+        self._time = None
 
     def save(self):
         """save the information of weapon"""
@@ -34,6 +37,8 @@ class WeaponManager(object):
             id = weapon_mfc.get_weapon_id()
             if id != -1:
                 weapon_mfc.set_weapon_info(self._weapon_dict[id])
+            else: # update weapon list
+                weapon_mfc.set_weapon_list(self._weapon_dict)
 
     def generate_default_weapon(self):
         """ generate weapons when player firstly login """
@@ -46,16 +51,22 @@ class WeaponManager(object):
             message = WeaponMessageToClient(MessageType.CREATE, MessageTargetType.WEAPON, taken_weapon_list)
             dispatcher.Dispatcher.send(socket, message)
 
-    def generate_weapon(self):
+    def generate_in_time(self):
         """ generate weapons when game is running """
         untaken_weapon_list = []
-        if self._weapon_dict != {}:
+        if self._game_manager.is_running and self._weapon_dict != {}:
             socket = manager.manager_online.OnlineManager.socket_buffer[self._player_id]
             for info in self._weapon_dict.values():
-                if info.take == 0 and not info.generat:
+                if info.take == 0 and not info.generate:
                     untaken_weapon_list.append(info)
 
-            if untaken_weapon_list is not []:
-                message = WeaponMessageToClient(MessageType.CREATE, MessageTargetType.WEAPON, untaken_weapon_list[0])
+            if len(untaken_weapon_list) > 0:
+                pos = self._game_manager.scene_manager.get_next_enemy_spawner()
+                untaken_weapon_list[0].weapon_position = (pos[0], 0.5, pos[2])
+                message = WeaponMessageToClient(MessageType.CREATE, MessageTargetType.WEAPON, [untaken_weapon_list[0]])
                 untaken_weapon_list[0].generate = True
                 dispatcher.Dispatcher.send(socket, message)
+
+                self._time = threading.Timer(60, self.generate_in_time)
+                self._time.start()
+            print "hh2"

@@ -17,7 +17,7 @@ class GameManager(object):
         self.is_running = True
         self.scene_manager = SceneManager(player_id)
         self.player_manager = PlayerManager(player_id)
-        self.weapon_manager = WeaponManager(player_id)
+        self.weapon_manager = WeaponManager(player_id, self)
         self.enemy_manager = EnemyManager(player_id, self)
 
     def load(self):
@@ -28,9 +28,9 @@ class GameManager(object):
 
     def save(self):
         flag = self.scene_manager.save()
-        flag |= self.player_manager.save()
-        flag |= self.weapon_manager.save()
-        flag |= self.enemy_manager.save()
+        flag &= self.player_manager.save()
+        flag &= self.weapon_manager.save()
+        flag &= self.enemy_manager.save()
         conn = DBCPManager.get_connection(self.player_id)
         if flag:
             conn.commit()

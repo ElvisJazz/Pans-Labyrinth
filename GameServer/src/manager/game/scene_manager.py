@@ -51,8 +51,10 @@ class SceneManager(object):
             self.maze_array.append(t_list)
 
     def get_next_enemy_spawner(self):
-        r = self._maze_enemy_spawner_list[self._next]
-        self._next = (self._next+1) % len(self._maze_enemy_spawner_list)
+        r = (0,0,0)
+        while r[0] == 0 and r[1] == 0 and r[2] == 0:
+            r = self._maze_enemy_spawner_list[self._next]
+            self._next = (self._next+1) % len(self._maze_enemy_spawner_list)
         return r
 
     def generate_routine(self):

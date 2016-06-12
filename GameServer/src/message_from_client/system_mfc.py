@@ -6,7 +6,7 @@
 from info.user_info import UserInfo
 
 
-class RegisterAndLoginMessageFromClient(object):
+class SystemMessageFromClient(object):
 
     def set_user_info(self, user_info):
         if isinstance(user_info, UserInfo):

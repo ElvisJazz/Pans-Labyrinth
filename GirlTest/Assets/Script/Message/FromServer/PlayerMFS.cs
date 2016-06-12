@@ -12,4 +12,8 @@ public class PlayerMessageFromServer : BaseMessage {
 	public int max_experience;
 	// Position
 	public float[] position;
+	// Dead num
+	public int dead_num;
+	// Level
+	public string level;
 }

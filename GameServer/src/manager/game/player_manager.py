@@ -31,7 +31,8 @@ class PlayerManager(object):
     def update(self, player_mfc):
         """ update player info """
         if isinstance(player_mfc, PlayerMessageFromClient):
-            player_mfc.set_player_info(self.player_info)
+           if player_mfc.set_player_info(self.player_info):
+              self.generate()
 
     def generate(self):
         """ send player info to client """

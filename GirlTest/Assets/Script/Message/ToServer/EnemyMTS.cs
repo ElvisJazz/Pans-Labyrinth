@@ -11,9 +11,12 @@ public class EnemyMessageToServer : BaseMessage {
 	public int health;
 	// Position
 	public float[] position;
+	// Next position
+	public float[] next_position;
 
-	public EnemyMessageToServer(int message_type, int target_type, int enemy_id, int health, Vector3 position) : base(message_type, target_type) {
+	public EnemyMessageToServer(int message_type, int target_type, int enemy_id, int health, Vector3 position, Position next_position) : base(message_type, target_type) {
 		this.position = new float[3]{position.x, position.y, position.z};
+		this.next_position = new float[3]{next_position.x, next_position.y, next_position.z};
 		this.health = health;
 		this.enemy_id = enemy_id;
 	}
@@ -28,9 +31,12 @@ public struct ServerEnemyMessage{
 	public int health;
 	// Position
 	public float[] position;
+	// Next position
+	public float[] next_position;
 
-	public ServerEnemyMessage(int enemy_id, int health, Position position) {
+	public ServerEnemyMessage(int enemy_id, int health, Position position, Position next_position) {
 		this.position = new float[3]{position.x, position.y, position.z};
+		this.next_position = new float[3]{next_position.x, next_position.y, next_position.z};
 		this.health = health;
 		this.enemy_id = enemy_id;
 	}

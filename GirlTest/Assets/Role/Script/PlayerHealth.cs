@@ -5,15 +5,9 @@ using System.Collections;
 public class PlayerHealth : MonoBehaviour {
 
 	// Player's health
-	int health = 100;
-	public int Health {
-		get{
-			return health;
-		}
-		set{
-			health = value; 
-		}
-	}
+	public int Health = 100;
+	// Dead num
+	public int DeadNum = 0;
 	// Damage image
 	public Image DamageImage = null;
 	// Damge color
@@ -40,7 +34,7 @@ public class PlayerHealth : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		health = MaxHealth;
+		Health = MaxHealth;
 		// Get animator
 		playerAnimator = GetComponent<Animator>();
 		// Init gameController
@@ -61,14 +55,17 @@ public class PlayerHealth : MonoBehaviour {
 	// Update
 	void Update(){
 		UpdateDamageEffect ();
+		if (IsDead) {
+			Reborth ();
+		}
 	}
 
 	// Get hurt
 	public void GetHurt(int amount){
-		health -= amount;
+		Health -= amount;
 		isDamage = true;
-		if (health <= 0) {
-			health = 0;
+		if (Health <= 0) {
+			Health = 0;
 			Death ();
 		} else if(playerAnimator.GetCurrentAnimatorStateInfo (0).fullPathHash != damageState && !playerAnimator.IsInTransition(0)){
 			playerAnimator.SetTrigger ("Damage");
@@ -79,9 +76,9 @@ public class PlayerHealth : MonoBehaviour {
 
 	// Add health value
 	public void AddHealthValue(int value){
-		health += value;
-		if (health > MaxHealth) {
-			health = MaxHealth;
+		Health += value;
+		if (Health > MaxHealth) {
+			Health = MaxHealth;
 		}
 
 		UpdateHealthColor ();
@@ -93,10 +90,22 @@ public class PlayerHealth : MonoBehaviour {
 		IsDead = true;
 		//gameController.GameOver ();
 	}
+
+	// Reborth
+	void Reborth(){
+		playerAnimator.SetTrigger ("Reborth");
+		IsDead = false;
+		DeadNum++;
+		transform.position = Vector3.zero;
+		PlayerManager.UpdateServerPlayer(true);
+		Health = MaxHealth;
+		UpdateHealthColor ();
+		//gameController.GameOver ();
+	}
 		
 	// Set health color
 	void UpdateHealthColor(){
-		float rate = (float)health / MaxHealth;
+		float rate = (float)Health / MaxHealth;
 		if (rate <= 0.33f) {
 			HealthColor = Color.red;
 		} else if (rate <= 0.66f) {

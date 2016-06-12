@@ -14,6 +14,7 @@ class EnemyInfo(object):
         self.health = health
         self.max_health = max_health
         self.position = position
+        self.next_position = None
         self.target_routine = target_routine
         self.hurt = hurt
         self.experience = experience

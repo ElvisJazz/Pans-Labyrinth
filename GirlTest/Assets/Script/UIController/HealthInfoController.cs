@@ -117,7 +117,7 @@ public class HealthInfoController : MonoBehaviour {
 	// Update health text
 	void UpdateHealthText(){
 		if (playerHealth != null) {
-			PlayerHealthText.text = playerHealth.Health + "/" + playerHealth.MaxHealth;
+			PlayerHealthText.text = playerHealth.Health + "/" + playerHealth.MaxHealth+"(DeathNum:"+playerHealth.DeadNum+")";
 		}
 	}
 }

@@ -5,8 +5,8 @@
 # ======================================================================
 from database.bl.user_info_bl import UserInfoBL
 from database.dbcp_manager import DBCPManager
-from message_from_client.register_login_mfc import RegisterAndLoginMessageFromClient
 from info.user_info import UserInfo
+from message_from_client.system_mfc import SystemMessageFromClient
 
 
 class LoginManager(object):
@@ -15,7 +15,7 @@ class LoginManager(object):
     def login(cls, login_mfc):
         conn = None
         try:
-            if isinstance(login_mfc, RegisterAndLoginMessageFromClient):
+            if isinstance(login_mfc, SystemMessageFromClient):
                 user_info = UserInfo()
                 login_mfc.set_user_info(user_info)
                 conn = DBCPManager.get_connection()

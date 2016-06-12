@@ -14,6 +14,8 @@ public class Dispatcher
 			HandleWeaponMessage (message);
 		}else if (bm.target_type == MessageConstant.TargetType.SCENE.GetHashCode()){
 			HandleSceneMessage (message);
+		}else if (bm.target_type == MessageConstant.TargetType.SYSTEM.GetHashCode()){
+			HandleSystemMessage (message);
 		}
 	}
 
@@ -53,6 +55,14 @@ public class Dispatcher
 		MazeMessageFromServer mm = JsonUtility.FromJson<MazeMessageFromServer> (message);
 		if (mm.message_type == MessageConstant.Type.CREATE.GetHashCode ()) {			
 			MazeManager.CreateMaze (mm);
+		} 
+	}
+
+	// Handle system message
+	public static void HandleSystemMessage (string message){
+		SystemMessageFromServer sm = JsonUtility.FromJson<SystemMessageFromServer> (message);
+		if (sm.message_type == MessageConstant.Type.ERROR.GetHashCode ()) {
+			MessageTip.SetTip (sm.message, true);
 		} 
 	}
 }

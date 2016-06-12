@@ -22,5 +22,7 @@ class PlayerMessageToClient(object):
                 self.experience = player_info.experience
                 self.max_experience = player_info.max_experience
                 self.position = player_info.position
+                self.dead_num = player_info.dead_num
+                self.level = player_info.level
         else:
             raise Exception("Instance of PlayerInfo is expected!")

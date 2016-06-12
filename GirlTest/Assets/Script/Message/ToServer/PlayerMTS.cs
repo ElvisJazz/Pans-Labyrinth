@@ -3,19 +3,20 @@ using UnityEngine;
 
 [System.Serializable]
 public class PlayerMessageToServer : BaseMessage {
-	// Player_id
-	public int player_id;
 	// Positon
 	public float[] position;
 	// Health
 	public int health;
 	// Experience
 	public int experience;
+	// Dead num
+	public int dead_num;
 
-	public PlayerMessageToServer(int message_type, int target_type, Vector3 position, int health, int experience):base(message_type, target_type) {
+	public PlayerMessageToServer(int message_type, int target_type, Vector3 position, int health, int experience, int dead_num):base(message_type, target_type) {
 		this.position = new float[3]{position.x, position.y, position.z};
 		this.health = health;
 		this.experience = experience;
+		this.dead_num = dead_num;
 	}
 
 	public bool CheckEqual(PlayerMessageToServer pm){

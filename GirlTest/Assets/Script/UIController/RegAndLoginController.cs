@@ -61,7 +61,7 @@ public class RegAndLoginController : MonoBehaviour {
 		if (!nextOpFlag)
 			return;
 		// Login option
-		SendRegiserAndLoginMessage(MessageConstant.Type.LOGIN, username, password);
+		SystemManager.SendRegiserAndLoginMessage(MessageConstant.Type.LOGIN, username, password);
 	}
 
 	// RegisterOK
@@ -89,7 +89,8 @@ public class RegAndLoginController : MonoBehaviour {
 		if (!nextOpFlag)
 			return;
 		// Register option
-		SendRegiserAndLoginMessage(MessageConstant.Type.REGISTER, username, password1);
+		if (SystemManager.SendRegiserAndLoginMessage (MessageConstant.Type.REGISTER, username, password1))
+			OnClickBack ();
 	}
 
 	// Check password
@@ -99,39 +100,6 @@ public class RegAndLoginController : MonoBehaviour {
 		} else {
 			PasswordTipText.text = "";
 		}
-	}
-
-	// Check result of login and register
-	private void CheckResult(int squence_id, MessageConstant.Type type){
-		RegisterAndLoginMessageFromServer rl_message = null;
-		int i = 0;
-		while (rl_message == null && i<=20) {
-			rl_message = ClientSocket.GetInstance ().GetRegisterAndLoginMessage (squence_id);
-			Thread.Sleep (1000);
-			i++;
-		}
-		if (rl_message == null) {
-			MessageTip.SetTip (type + " time out!");  
-		} else if (rl_message.success) {
-			if (type == MessageConstant.Type.REGISTER) {
-				OnClickBack ();
-				MessageTip.SetTip ("Register success, please login!");  
-			} else {
-				SceneManager.LoadScene (1);
-			}
-		} else if (rl_message.message != "") {
-			MessageTip.SetTip (rl_message.message);  
-		}
-	}
-
-	// Send register and login message
-	private void SendRegiserAndLoginMessage(MessageConstant.Type type, string username, string password){
-		int sequence_id = Mathf.RoundToInt (Time.time * 1000);
-		RegisterAndLoginMessageToServer data = new RegisterAndLoginMessageToServer(type.GetHashCode (), MessageConstant.TargetType.SYSTEM.GetHashCode (),
-			username, password, sequence_id);
-		String message = JsonUtility.ToJson (data);
-		ClientSocket.GetInstance ().SendMessage (message+BaseMessage.END_MARK);
-		CheckResult (sequence_id, type);
 	}
 
 	// Clear tip

@@ -35,8 +35,8 @@ class EnemyInfoBL(BaseBL):
         return True
 
     # Delete enemy record list
-    def delete_list(self, enemy_info_dict):
-        for info in enemy_info_dict.values():
+    def delete_list(self, enemy_info_list):
+        for info in enemy_info_list:
             if self.dao.delete(info.enemy_id) <= 0:
                return False
         #self.dao.commit()

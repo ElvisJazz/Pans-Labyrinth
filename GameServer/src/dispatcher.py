@@ -9,7 +9,7 @@ from constant.message_type import MessageType
 from manager.manager_online import OnlineManager
 from manager.user.login_manager import LoginManager
 from manager.user.register_manager import RegisterManager
-from message_to_client.register_login_mtc import RegisterAndLoginMessage
+from message_to_client.system_mtc import SystemMessage
 from util.message_packer import MessagePacker
 
 
@@ -25,13 +25,13 @@ class Dispatcher(object):
             # Register
             if mfc.message_type == MessageType.REGISTER:
                 reply = True
-                r_message = RegisterAndLoginMessage(mfc.message_type, mfc.target_type, mfc.sequence_id)
+                r_message = SystemMessage(mfc.message_type, mfc.target_type, mfc.sequence_id)
                 r_message.success = RegisterManager.register(mfc)
 
             # Login
             elif mfc.message_type == MessageType.LOGIN:
                 reply = True
-                r_message = RegisterAndLoginMessage(mfc.message_type, mfc.target_type, mfc.sequence_id)
+                r_message = SystemMessage(mfc.message_type, mfc.target_type, mfc.sequence_id)
                 user_info = LoginManager.login(mfc)
                 r_message.success = True if user_info is not None else False
                 if r_message.success:
@@ -48,12 +48,16 @@ class Dispatcher(object):
                     game_manager.enemy_manager.generate()
                     # Start generating new enemies in fixed time
                     game_manager.enemy_manager.generate_in_time()
+                    # Start generating new weapons in fixed time
+                    game_manager.weapon_manager.generate_in_time()
 
             # Update
             elif mfc.message_type == MessageType.UPDATE:
                 game_manager = (OnlineManager.get_game_manager(socket))
                 if game_manager is None:
-                    raise "Please login!"
+                    r_message = SystemMessage(MessageType.ERROR, MessageTargetType.SYSTEM, 0)
+                    reply = True
+                    raise Exception("System error, please relogin!")
                 if mfc.target_type == MessageTargetType.PLAYER:
                     game_manager.player_manager.update(mfc)
                     game_manager.enemy_manager.update_client_enemy_routine()
@@ -65,7 +69,8 @@ class Dispatcher(object):
             # Save
             elif mfc.message_type == MessageType.SAVE:
                 reply = True
-                #r_message.success = OnlineManager.save_game_manager(socket)
+                r_message = SystemMessage(mfc.message_type, mfc.target_type, mfc.sequence_id)
+                r_message.success = OnlineManager.save_game_manager(socket)
 
             # Logout
             elif mfc.message_type == MessageType.LOGOUT:
