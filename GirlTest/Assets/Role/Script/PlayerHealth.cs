@@ -99,6 +99,7 @@ public class PlayerHealth : MonoBehaviour {
 		transform.position = Vector3.zero;
 		PlayerManager.UpdateServerPlayer(true);
 		Health = MaxHealth;
+		MessageTip.SetTip ("Live or die, this is a problem...");
 		UpdateHealthColor ();
 		//gameController.GameOver ();
 	}

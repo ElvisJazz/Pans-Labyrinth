@@ -28,14 +28,15 @@ class EnemyManager(object):
         self._player_id = player_id
         self.enemy_config_list = []
         self._alive_enemy_dict = {}
+        self._new_enemy_dict = {}
         self._dead_enemy_list = []
         self._id = 0
         self._time = None
-        self._max_enemies = 10
 
     def save(self):
         """save the information of enemy"""
         enemy_info_bl = EnemyInfoBL(self._player_id, None, True)
+        enemy_info_bl.add_list(self._new_enemy_dict.values())
         enemy_info_bl.update_dict(self._alive_enemy_dict)
         enemy_info_bl.delete_list(self._dead_enemy_list)
         return True
@@ -67,11 +68,21 @@ class EnemyManager(object):
             id = enemy_mfc.get_enemy_id()
             # message from client is for single enemy
             if id != -1:
-                enemy = self._alive_enemy_dict[id]
+                enemy = None
+                is_in_alive_dict = False
+                if self._alive_enemy_dict.has_key(id):
+                    enemy = self._alive_enemy_dict[id]
+                    is_in_alive_dict = True
+                if enemy is None:
+                    enemy = self._new_enemy_dict[id]
                 enemy_mfc.set_enemy_info(enemy)
                 # if enemy is dead, pop it from dead dict to living list
-                if self._alive_enemy_dict[id].health <= 0:
-                    self._dead_enemy_list.append(self._alive_enemy_dict.pop(id))
+                if enemy.health <= 0:
+                    if is_in_alive_dict:
+                        self._alive_enemy_dict.pop(id)
+                    else:
+                        self._new_enemy_dict.pop(id)
+                    self._dead_enemy_list.append(enemy)
                 else:
                     # update enemy state, mainly for attack action
                     start_pos = self.transfer_enemy_pos_to_start_pos(enemy.next_position)
@@ -84,7 +95,7 @@ class EnemyManager(object):
                     dispatcher.Dispatcher.send(socket, message)
             # message from client is for enemy list, mainly for planing new routines
             else:
-                enemy_mfc.set_enemy_list(self._alive_enemy_dict)
+                enemy_mfc.set_enemy_list(self._alive_enemy_dict, self._new_enemy_dict)
 
     def generate(self):
         """ send enemy info to client """
@@ -102,7 +113,7 @@ class EnemyManager(object):
         """ generate new enemies in fixed time """
         if self._game_manager.is_running :
             # Create enemy list according to config list
-            if len(self._alive_enemy_dict) < self._max_enemies:
+            if len(self._alive_enemy_dict)+len(self._new_enemy_dict) == 0:
                 # get player position
                 target_pos = self.transfer_player_pos_to_target_pos()
                 self._id += 1
@@ -115,17 +126,17 @@ class EnemyManager(object):
                         # set routine
                         start_pos = self.transfer_enemy_pos_to_start_pos(enemy.position)
                         enemy.target_routine = self.get_enemy_routine(start_pos, target_pos)
-                        self._alive_enemy_dict[self._id] = enemy
+                        self._new_enemy_dict[self._id] = enemy
                         enemy_list.append(enemy)
                         self._id += 1
                 # Send to client
                 self._generate_enemy_list(enemy_list)
                 # Need new conn to save because SQLite3 can only use the same connection in the same thread for safe
-                conn = DBCPManager.get_connection()
-                EnemyInfoBL(self._player_id, conn).add_list(enemy_list)
-                conn.commit()
-                conn.close()
-            self._time = threading.Timer(60, self.generate_in_time)
+                # conn = DBCPManager.get_connection()
+                # EnemyInfoBL(self._player_id, conn).add_list(enemy_list)
+                # conn.commit()
+                # conn.close()
+            self._time = threading.Timer(15, self.generate_in_time)
             self._time.start()
             print "hh1"
 
@@ -166,13 +177,17 @@ class EnemyManager(object):
         """ update enemy info to client, mainly routines """
         socket = manager.manager_online.OnlineManager.socket_buffer[self._player_id]
         self.__set_enemies_state()
-        message = EnemyMessageToClient(MessageType.UPDATE, MessageTargetType.ENEMY, self._alive_enemy_dict.values())
+        enemy_list = self._alive_enemy_dict.values()
+        enemy_list.extend(self._new_enemy_dict.values())
+        message = EnemyMessageToClient(MessageType.UPDATE, MessageTargetType.ENEMY, enemy_list)
         dispatcher.Dispatcher.send(socket, message)
 
     def __set_enemies_state(self):
         """  set routine and action of enemy """
         target_pos = self.transfer_player_pos_to_target_pos()
-        for enemy in self._alive_enemy_dict.values():
+        enemy_list = self._alive_enemy_dict.values()
+        enemy_list.extend(self._new_enemy_dict.values())
+        for enemy in enemy_list:
             enemy_pos = enemy.next_position if enemy.next_position is not None else enemy.position
             start_pos = self.transfer_enemy_pos_to_start_pos(enemy_pos)
             self.__set_enemy_state(enemy, start_pos, target_pos)

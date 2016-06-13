@@ -30,7 +30,7 @@ public class EnemyMover : MonoBehaviour {
 	// Enemy manager
 	EnemyManager enemyManager = null;
 	// Routine
-	List<Position> routine = new List<Position>();
+	public List<Position> routine = new List<Position>();
 	public List<Position> Routine {
 		get {
 			return routine;
@@ -39,14 +39,9 @@ public class EnemyMover : MonoBehaviour {
 			routine = value;
 		}
 	}
-	// Constant positon
-	public readonly Vector3 NONE_POSITION = new Vector3(-100,-100,-100); 
-	// Current target position
-	private Vector3 currentTargetPosition;
 
 	// Use this for initialization
 	void Start () {
-		currentTargetPosition = NONE_POSITION;
 		animator = GetComponent<Animator> ();
 		enemyState = GetComponent<EnemyState> ();
 		enemyManager = GameObject.Find ("EnemySpawner").GetComponent<EnemyManager> ();
@@ -95,11 +90,47 @@ public class EnemyMover : MonoBehaviour {
 			// give a way for the enemy which id is less
 			if (enemyMover.EnemyId < this.enemyId) {
 				//transform.Translate(0f, 0f, 1.0f);
-				Position pos = new Position(routine[0].x+0.5f, 0, routine[0].z);
-				routine [0] = pos;
-
+				ChangeCurrentWay();
 			}
 				
+		}
+	}
+
+	void OnCollisionStay(Collision other){
+		if (other.gameObject.CompareTag ("Enemy")) {
+			EnemyMover enemyMover = other.gameObject.GetComponent<EnemyMover> ();
+			// give a way for the enemy which id is less
+			if (enemyMover.EnemyId < this.enemyId) {
+				//transform.Translate(0f, 0f, 1.0f);
+				GetComponent<Rigidbody> ().isKinematic = true;
+			}
+		} else if (!other.gameObject.CompareTag ("Player")) {
+			GetComponent<Rigidbody> ().isKinematic = true;
+		}
+	}
+
+	void OnCollisionExit(Collision other){
+		
+		if(other.gameObject.CompareTag("Enemy")){
+			GetComponent<Rigidbody>().isKinematic = false;
+		}
+	}
+
+	// Change current direction to give a way , in fact it makes them do not overlap
+	void ChangeCurrentWay(){
+		// Check current direciton
+		if (Mathf.Abs(routine [0].x - transform.position.x) <= 0.01f) {
+			Position pos1 = new Position (routine [0].x, 0, routine [0].z + 0.5f);
+			Position pos2 = new Position (transform.position.x, 0, transform.position.z + 0.5f);
+			routine.RemoveAt (0);
+			routine.Insert(0, pos1);
+			routine.Insert(0, pos2);
+		} else if (Mathf.Abs(routine [0].z - transform.position.z) <= 0.01f) {
+			Position pos1 = new Position (routine [0].x + 0.5f, 0, routine [0].z);
+			Position pos2 = new Position (transform.position.x + 0.5f, 0, transform.position.z);
+			routine.RemoveAt (0);
+			routine.Insert(0, pos1);
+			routine.Insert(0, pos2);
 		}
 	}
 

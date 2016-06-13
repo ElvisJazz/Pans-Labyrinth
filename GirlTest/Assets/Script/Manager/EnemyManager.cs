@@ -56,7 +56,7 @@ public class EnemyManager : MonoBehaviour {
 			EnemyMover eMover = enemy.GetComponent<EnemyMover> ();
 			if (eHealth.Health <= 0)
 				enemy_table.Remove (enemy_id);
-			Position next_position = new Position(enemy.transform.position); // eMover.Routine.Count > 0 ? eMover.Routine [0] : 
+			Position next_position = eMover.Routine.Count > 0 ? eMover.Routine [0] : new Position(enemy.transform.position); 
 			EnemyMessageToServer em = new EnemyMessageToServer (MessageConstant.Type.UPDATE.GetHashCode (), MessageConstant.TargetType.ENEMY.GetHashCode (), enemy_id, eHealth.Health, enemy.transform.position, next_position);
 			string message = JsonUtility.ToJson (em);
 			ClientSocket.GetInstance ().SendMessage (message+BaseMessage.END_MARK);
@@ -72,7 +72,7 @@ public class EnemyManager : MonoBehaviour {
 			EnemyHealth eHealth = enemy.GetComponent<EnemyHealth> ();
 			EnemyMover eMover = enemy.GetComponent<EnemyMover> ();
 			Position position = new Position(enemy.transform.position);
-			Position next_position = new Position(enemy.transform.position); // eMover.Routine.Count > 0 ? eMover.Routine [0] : 
+			Position next_position = eMover.Routine.Count > 0 ? eMover.Routine [0] : new Position(enemy.transform.position);  
 			ServerEnemyMessage sm = new ServerEnemyMessage (enemy_id, eHealth.Health, position, next_position);
 			elm.enemy_info_list.Add (sm);
 		}
@@ -99,7 +99,6 @@ public class EnemyManager : MonoBehaviour {
 			if (currentRoutine.Count > 0) {
 				newRoutine.Insert (0, currentRoutine [0]);
 				Position po = currentRoutine [0];
-				Debug.Log ("before:" + po.x+"||"+po.y+"||"+po.z);
 			}
 			currentRoutine.Clear();
 			currentRoutine.AddRange(newRoutine);

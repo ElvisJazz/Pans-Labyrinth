@@ -17,6 +17,8 @@ public class GameController : MonoBehaviour {
 			Cursor.visible = false;
 			Screen.fullScreen = true;
 			socket = ClientSocket.GetInstance ();
+		} else {
+			Cursor.visible = true;
 		}
 	}
 	
@@ -27,7 +29,10 @@ public class GameController : MonoBehaviour {
 		if (SceneManager.GetActiveScene ().name == "Main") {
 			UpdateCursor ();
 			CheckConnected ();
+		} else {
+			Cursor.visible = true;
 		}
+
 	}
 
 	void OnApplicationQuit(){

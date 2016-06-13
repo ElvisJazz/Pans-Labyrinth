@@ -10,12 +10,16 @@ public class MonsterHealth : EnemyHealth {
 
 	// Blood block
 	public GameObject BloodBlock;
+	// Bullets supply
+	public GameObject BulletsSupply;
 	// Amount of blood blocks when monster dies
 	public int Amount = 3;
 	// Power of bounce 
 	public float power = 6f;
 	// Pos of blood block spawner
 	public Transform BloodSpawner;
+	// Bullets supply spawner
+	public Transform SupplySpawner;
 
 	new void Start(){
 		base.Start ();
@@ -34,5 +38,7 @@ public class MonsterHealth : EnemyHealth {
 			Vector2 vec = Random.insideUnitCircle * power;
 			blood.GetComponent<Rigidbody> ().AddForce (new Vector3(vec.x, power, vec.y), ForceMode.VelocityChange);
 		}
+
+		Instantiate (BulletsSupply, SupplySpawner.position, Quaternion.identity);
 	}
 }

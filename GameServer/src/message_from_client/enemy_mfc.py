@@ -27,12 +27,17 @@ class EnemyMessageFromClient(object):
         else:
             raise Exception("Instance of EnemyInfo is expected!")
 
-    def set_enemy_list(self, enemy_dict):
-        if isinstance(enemy_dict, dict):
+    def set_enemy_list(self, enemy_dict1, enemy_dict2):
+        if isinstance(enemy_dict1, dict) and isinstance(enemy_dict2, dict):
             if hasattr(self, 'enemy_info_list'):
                 enemy_info_list = self.enemy_info_list
                 for enemy_info in enemy_info_list:
-                    enemy = enemy_dict[enemy_info["enemy_id"]]
+                    enemy = None
+                    id = enemy_info["enemy_id"]
+                    if enemy_dict1.has_key(id):
+                        enemy = enemy_dict1[id]
+                    else:
+                        enemy = enemy_dict2[id]
                     if enemy_info.has_key('health'):
                         enemy.health = enemy_info["health"]
                     if enemy_info.has_key('position'):

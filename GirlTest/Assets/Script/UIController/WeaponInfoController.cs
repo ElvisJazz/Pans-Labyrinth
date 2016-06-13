@@ -10,12 +10,16 @@ public class WeaponInfoController : MonoBehaviour {
 		public int id;
 		public int currentAmountInGun;
 		public int currentAmountInBag;
+		public int maxBulletsInGun;
+		public int maxBulletsInBag;
 
-		public WeaponDetail(string name, int id, int currentAmountInGun, int currentAmountInBag){
+		public WeaponDetail(string name, int id, int currentAmountInGun, int currentAmountInBag, int maxBulletsInGun, int maxBulletsInBag){
 			this.name = name;
 			this.id = id;
 			this.currentAmountInGun = currentAmountInGun;
 			this.currentAmountInBag = currentAmountInBag;
+			this.maxBulletsInGun = maxBulletsInGun;
+			this.maxBulletsInBag = maxBulletsInBag;
 		}
 	}
 	// All weapon prefabs and names
@@ -56,22 +60,9 @@ public class WeaponInfoController : MonoBehaviour {
 	GameObject currentWeapon = null;
 	WeaponController currentWeaponController = null;
 
-	// Awake
-	void Awake(){
-		// Init weapons in bag
-		weaponsInBag = new Dictionary<string, WeaponDetail> ();
-//		WeaponDetail detail;
-//		detail.name = "FAL";
-//		detail.currentAmountInBag = 240;
-//		detail.currentAmountInGun = 40;
-//		weaponsInBag.Add("FAL", detail);
-//		//weaponsInBag.Add("Thumper", detail);
-//		weaponsInBag.Add("Spas-12", detail);
-//		weaponsInBag.Add("M1911", detail);
-	}
-
 	// Use this for initialization
 	void Start () {
+		weaponsInBag = new Dictionary<string, WeaponDetail> ();
 		PrefabsDic = new Dictionary<string, GameObject> ();
 		PrefabsImgDic = new Dictionary<string, GameObject> ();
 		// Init prefabs
@@ -159,6 +150,8 @@ public class WeaponInfoController : MonoBehaviour {
 			currentWeaponController = currentWeapon.GetComponentInChildren<WeaponController>();
 			currentWeaponController.AmountOfBulletsInGun = weaponDetail.currentAmountInGun;
 			currentWeaponController.AmountOfBulletsInBag = weaponDetail.currentAmountInBag;
+			currentWeaponController.MaxAmountOfBulletsInGun= weaponDetail.maxBulletsInGun;
+			currentWeaponController.MaxAmountOfBulletsInBag = weaponDetail.maxBulletsInBag;
 		}else{
 			ShowInfo ("No weapon selected! Maybe something wrong happend!", false);
 		}
@@ -198,6 +191,23 @@ public class WeaponInfoController : MonoBehaviour {
 		if (currentTime > DisplayTime) {
 			WeaponInfoText.text = "";
 			hasDisplay = false;
+		}
+	}
+
+	// Add full bullets in bag
+	public void AddFullBullets(){
+		Dictionary<string, WeaponDetail> weaponDic = new Dictionary<string, WeaponDetail> ();
+		foreach(WeaponDetail detail in weaponsInBag.Values){
+			WeaponDetail detail0 = detail;
+			detail0.currentAmountInBag = detail.maxBulletsInBag;
+			detail0.currentAmountInGun = detail.maxBulletsInGun;
+			weaponDic.Add (detail0.name, detail0);
+		}
+		weaponsInBag = weaponDic;
+		// Load current weapon
+		if (currentWeaponController != null) {
+			currentWeaponController.AmountOfBulletsInGun = currentWeaponController.MaxAmountOfBulletsInGun;
+			currentWeaponController.AmountOfBulletsInBag = currentWeaponController.MaxAmountOfBulletsInBag;
 		}
 	}
 

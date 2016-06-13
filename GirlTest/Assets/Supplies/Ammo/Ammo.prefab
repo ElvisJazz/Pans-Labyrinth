@@ -113,9 +113,9 @@ GameObject:
   - 33: {fileID: 3300012}
   - 65: {fileID: 6500012}
   - 23: {fileID: 2300012}
-  - 114: {fileID: 11400000}
   - 82: {fileID: 8200000}
-  - 114: {fileID: 11400002}
+  - 54: {fileID: 5409388}
+  - 114: {fileID: 11404888}
   m_Layer: 9
   m_Name: Ammo
   m_TagString: Untagged
@@ -202,7 +202,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0.27507547, z: 0, w: 0.9614227}
-  m_LocalPosition: {x: 129.54944, y: 8.585742, z: 2.0495906}
+  m_LocalPosition: {x: 0, y: 0.2, z: -0}
   m_LocalScale: {x: 0.5890899, y: 0.37151375, z: 0.5890899}
   m_Children:
   - {fileID: 400008}
@@ -444,6 +444,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &5409388
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 0
 --- !u!65 &6500012
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -530,7 +545,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &11400000
+--- !u!114 &11404888
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -538,28 +553,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 100012}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0ec8657ec5ba424dbe23d6891ea342f, type: 3}
+  m_Script: {fileID: 11500000, guid: 656ad3074b6c9fd4894e35f4cd00cbc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 1000
-  target: {fileID: 0}
-  delay: 0.5
-  limited: 0
-  limit: 5
-  destroyAtLimit: 0
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44607c82a141f4c64a7229c31c4be30f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectName: 416d6d6f20426f78
-  description: 526566696c6c7320616d6d6f20666f722063757272656e746c7920657175697070656420776561706f6e2e
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

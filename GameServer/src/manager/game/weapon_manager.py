@@ -67,6 +67,6 @@ class WeaponManager(object):
                 untaken_weapon_list[0].generate = True
                 dispatcher.Dispatcher.send(socket, message)
 
-                self._time = threading.Timer(60, self.generate_in_time)
+                self._time = threading.Timer(15, self.generate_in_time)
                 self._time.start()
             print "hh2"

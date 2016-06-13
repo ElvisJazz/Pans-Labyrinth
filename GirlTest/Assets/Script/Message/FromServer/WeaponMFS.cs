@@ -18,9 +18,9 @@ public struct WeaponInfo{
 	// Current bullets in bag
 	public int current_bullets_in_bag;
 	// Max Current bullets in gun
-	public int max_current_bullets_in_gun;
+	public int max_bullets_in_gun;
 	// Max current bullets in bag
-	public int max_current_bullets_in_bag;
+	public int max_bullets_in_bag;
 }
 
 [Serializable]

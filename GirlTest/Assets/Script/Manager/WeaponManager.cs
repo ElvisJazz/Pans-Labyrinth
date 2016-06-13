@@ -13,18 +13,15 @@ public class WeaponManager : MonoBehaviour {
 		foreach (WeaponInfo info in wm.weapon_info_list) {
 			if (info.take == 0) {
 				GameObject weapon = Instantiate (WeaponPrefabs [info.type_id], new Vector3 (info.position [0], info.position [1], info.position [2]), Quaternion.identity) as GameObject;
-				WeaponInfoController.WeaponDetail detail = new WeaponInfoController.WeaponDetail ();
-				detail.name = info.name;
-				detail.id = info.weapon_id;
-				detail.currentAmountInGun = info.current_bullets_in_gun;
-				detail.currentAmountInBag = info.current_bullets_in_bag;
-				weapon.GetComponent<PickupWeapon> ().WeaponDetail = detail;
+				weapon.transform.parent = gameObject.transform;
+				WeaponInfoController.WeaponDetail weaponDetail = new WeaponInfoController.WeaponDetail (info.name, info.weapon_id, info.current_bullets_in_gun, info.current_bullets_in_bag, info.max_bullets_in_gun, info.max_bullets_in_bag);
+				weapon.GetComponent<PickupWeapon> ().WeaponDetail = weaponDetail;
 			} 
 			// The role has taken the weapon
 			else {
 				GameObject infoManager = GameObject.Find ("InfoManager");
 				if (infoManager != null) {
-					WeaponInfoController.WeaponDetail weaponDetail = new WeaponInfoController.WeaponDetail (info.name, info.weapon_id, info.current_bullets_in_gun, info.current_bullets_in_bag);
+					WeaponInfoController.WeaponDetail weaponDetail = new WeaponInfoController.WeaponDetail (info.name, info.weapon_id, info.current_bullets_in_gun, info.current_bullets_in_bag, info.max_bullets_in_gun, info.max_bullets_in_bag);
 					WeaponInfoController weaponInfoController = infoManager.GetComponent<WeaponInfoController> ();
 					weaponInfoController.AddNewWeaponInBag (weaponDetail);
 				}

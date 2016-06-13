@@ -87,7 +87,7 @@ public class PlayerMover : MonoBehaviour
 			rb.useGravity = true;		
 			
 			// Set velocity and Speed
-			velocity = new Vector3 (h, 0, v);	
+			velocity = new Vector3 (0, 0, v);	
 			velocity = transform.TransformDirection (velocity);
 			if (Input.GetKey (KeyCode.LeftShift)) {
 				anim.SetFloat ("Speed", v);
@@ -123,7 +123,7 @@ public class PlayerMover : MonoBehaviour
 			}
 
 			// Control left or right rotation
-			transform.Rotate (0, mX * RotateSpeed, 0);	 
+			transform.Rotate (0, (h+mX) * RotateSpeed, 0);	 
 			// Control up or down rotation
 			cameraObject.GetComponent<CameraController> ().RotateCameraByXAxis (-mY * RotateSpeed);
 			//		if (currentBaseState.fullPathHash == idleState) {

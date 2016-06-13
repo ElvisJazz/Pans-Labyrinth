@@ -1728,7 +1728,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 121340}
   m_LocalRotation: {x: 0.15261677, y: -0.15261659, z: -0.69044006, w: 0.690441}
-  m_LocalPosition: {x: 0.05397865, y: 0.00000006884336, z: -0.11613439}
+  m_LocalPosition: {x: 0.0342, y: -0, z: -0.0839}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
   m_Children: []
   m_Father: {fileID: 404382}
@@ -1809,9 +1809,11 @@ MonoBehaviour:
   exp: 20
   SinkSpeed: 2.5
   BloodBlock: {fileID: 150332, guid: 3d2373ffcf2edb34294d810f02718dd3, type: 2}
+  BulletsSupply: {fileID: 100012, guid: 40080881b25c59140a52bb0a9dde1173, type: 2}
   Amount: 3
   power: 6
   BloodSpawner: {fileID: 404382}
+  SupplySpawner: {fileID: 499278}
 --- !u!114 &11411646
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1836,6 +1838,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 5
+  routine: []
 --- !u!114 &11475230
 MonoBehaviour:
   m_ObjectHideFlags: 1

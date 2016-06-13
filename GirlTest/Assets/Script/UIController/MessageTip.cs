@@ -6,32 +6,32 @@ using UnityEngine.SceneManagement;
 public class MessageTip : MonoBehaviour
 {
 	// Tip
-	private static string tip = "The connection is aborted!";
+	private static string Tip = "The connection is aborted!";
 	// Is show tip
-	private static bool isShowTip = false;
+	private static bool IsShowTip = false;
 	// Is show option
-	private static bool isShowOp = false;
+	private static bool IsShowOp = false;
 	// Is relogin
-	private static bool isRelogin = false;
+	private static bool IsRelogin = false;
 
 	void OnGUI(){
-		if (isShowTip || isShowOp) {
+		if (IsShowTip || IsShowOp) {
 			Cursor.visible = true;
 			GUI.Box (new Rect (Screen.width / 2 - 100, Screen.height / 4, 280, 140), "");
-			GUI.Label (new Rect (Screen.width / 2 - 80, Screen.height / 4 + 20, 240, 80), tip);
-			if (isShowTip) {
+			GUI.Label (new Rect (Screen.width / 2 - 80, Screen.height / 4 + 20, 240, 80), Tip);
+			if (IsShowTip) {
 				if (GUI.Button (new Rect (Screen.width / 2 + 20, Screen.height / 4 + 100, 40, 20), "OK")) {
-					isShowTip = false;
+					IsShowTip = false;
 					Cursor.visible = false;
-					if (isRelogin) {
+					if (IsRelogin) {
 						SceneManager.LoadScene (0);
-						isRelogin = false;
+						IsRelogin = false;
 					}
 				}
 			} else {
 				Time.timeScale = 0;
 				if (GUI.Button (new Rect (Screen.width / 2 -75, Screen.height / 4 + 100, 65, 20), "SAVE")) {
-					isShowOp = false;
+					IsShowOp = false;
 					SystemManager.Save ();
 					Time.timeScale = 1;
 				}
@@ -39,7 +39,7 @@ public class MessageTip : MonoBehaviour
 					Application.Quit ();
 				}
 				if (GUI.Button (new Rect (Screen.width / 2 + 75, Screen.height / 4 + 100, 65, 20), "CANCLE")) {
-					isShowOp = false;
+					IsShowOp = false;
 					Time.timeScale = 1;
 				}
 			}
@@ -48,16 +48,16 @@ public class MessageTip : MonoBehaviour
 	}
 
 	public static void SetTip(string message, bool isRelogin=false){
-		tip = message;
-		isShowTip = true;
-		isShowOp = false;
-		isRelogin = isRelogin;
+		Tip = message;
+		IsShowTip = true;
+		IsShowOp = false;
+		IsRelogin = isRelogin;
 	}
 
 	public static void SetOption(){
-		tip = "是否保存当前进度信息，直接退出将失去包括当前等级、经验、体力等所有信息，下次登陆将回到上次存盘点！";
-		isShowOp = true;
-		isShowTip = false;
+		Tip = "是否保存当前进度信息，直接退出将失去包括当前等级、经验、体力等所有信息，下次登陆将回到上次存盘点！";
+		IsShowOp = true;
+		IsShowTip = false;
 	}
 }
 

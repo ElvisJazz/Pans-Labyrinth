@@ -13,7 +13,7 @@ public class MazeManager{
 		}
 	}
 
-	// Transfer  1d array to 2d array 
+	// Transfer 1d array to 2d array 
 	public static MazeCell[,] TransferTo2dArray(MazeCell[] array, int row, int column){
 		MazeCell[,] mazeArray = new MazeCell[row, column];
 		int k = 0;

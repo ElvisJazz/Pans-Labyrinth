@@ -1,24 +1,20 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Enemy\BaseScripts\EnemyMover.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Maze\Script\MazeSpawner.cs">
     <Files>
-      <File FileName="Assets\Script\UIController\WeaponSelector.cs" Line="45" Column="23" />
-      <File FileName="Assets\Script\UIController\PickupWeapon.cs" Line="15" Column="24" />
-      <File FileName="Assets\Enemy\BaseScripts\EnemyHealth.cs" Line="115" Column="24" />
-      <File FileName="Assets\Script\Manager\EnemyManager.cs" Line="75" Column="120" />
-      <File FileName="Assets\Enemy\BaseScripts\EnemyMover.cs" Line="98" Column="50" />
-      <File FileName="Assets\Enemy\BaseScripts\EnemyAttack.cs" Line="50" Column="6" />
-      <File FileName="Assets\Enemy\Goblin\Scripts\GoblinState.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\Manager\PlayerManager.cs" Line="15" Column="25" />
-      <File FileName="Assets\Script\Manager\SystemManager.cs" Line="27" Column="22" />
-      <File FileName="Assets\Script\Manager\WeaponManager.cs" Line="21" Column="63" />
-      <File FileName="Assets\Script\Manager\MazeManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\GameController.cs" Line="16" Column="26" />
-      <File FileName="Assets\Script\Message\FromServer\EnemyMFS.cs" Line="21" Column="12" />
+      <File FileName="Assets\Script\UIController\PickupWeapon.cs" Line="14" Column="1" />
+      <File FileName="Assets\Script\UIController\WeaponInfoController.cs" Line="162" Column="1" />
+      <File FileName="Assets\Maze\Script\MazeSpawner.cs" Line="122" Column="52" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="W:\Project\Pans-Labyrinth\GirlTest\Assets\Script\UIController\WeaponInfoController.cs" line="129" column="1" />
+      <Breakpoint file="W:\Project\Pans-Labyrinth\GirlTest\Assets\Script\UIController\PickupWeapon.cs" line="11" column="1" />
+      <Breakpoint file="W:\Project\Pans-Labyrinth\GirlTest\Assets\Script\UIController\PickupWeapon.cs" line="15" column="1" />
+      <Breakpoint file="W:\Project\Pans-Labyrinth\GirlTest\Assets\Script\UIController\PickupWeapon.cs" line="14" column="33" />
+      <Breakpoint file="W:\Project\Pans-Labyrinth\GirlTest\Assets\Script\UIController\WeaponInfoController.cs" line="162" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Assets\Script\GameController.cs" line="38" offsetX="361" offsetY="592" expression="s" liveUpdate="False" />

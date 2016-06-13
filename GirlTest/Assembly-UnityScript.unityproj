@@ -45,7 +45,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\FightingUnityChan_FreeAsset\Standard Assets\Scripts\Camera Scripts\MouseOrbit.js" />
      <Compile Include="Assets\originalRefence\Plugins\FPS Constructor V1\Demo Assets\Target\target.js" />
      <None Include="Assets\Role\Models\UnityChanShader\Shader\Unitychan_chara_eye.shader" />
      <None Include="Assets\Role\Models\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

@@ -20,7 +20,7 @@ public class PlayerMessageToServer : BaseMessage {
 	}
 
 	public bool CheckEqual(PlayerMessageToServer pm){
-		if (Mathf.Abs(this.position[0]-pm.position[0])<=0.01 && Mathf.Abs(this.position[1]-pm.position[1])<=0.01 && Mathf.Abs(this.position[2]-pm.position[2])<=0.01
+		if (Mathf.Abs(this.position[0]-pm.position[0])<=0.1 && Mathf.Abs(this.position[1]-pm.position[1])<=0.1 && Mathf.Abs(this.position[2]-pm.position[2])<=0.1
 		   && this.health == pm.health && this.experience == pm.experience)
 			return true;
 		else
