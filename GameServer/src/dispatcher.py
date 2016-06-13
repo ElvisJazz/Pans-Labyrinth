@@ -4,13 +4,14 @@
 # Date: 2016.5.27
 # ======================================================================
 import traceback
+
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
 from manager.manager_online import OnlineManager
 from manager.user.login_manager import LoginManager
 from manager.user.register_manager import RegisterManager
-from message_to_client.system_mtc import SystemMessage
-from util.message_packer import MessagePacker
+from message.message_to_client.system_mtc import SystemMessage
+from message.message_packer import MessagePacker
 
 
 class Dispatcher(object):

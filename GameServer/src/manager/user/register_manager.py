@@ -4,8 +4,7 @@
 # Date: 2016.5.28
 # ======================================================================
 import json
-from database.bl.enemy_config_info_bl import EnemyConfigInfoBL
-from database.bl.enemy_info_bl import EnemyInfoBL
+
 from database.bl.maze_config_info_bl import MazeConfigInfoBL
 from database.bl.maze_info_bl import MazeInfoBL
 from database.bl.player_config_info_bl import PlayerConfigInfoBL
@@ -14,12 +13,11 @@ from database.bl.user_info_bl import UserInfoBL
 from database.bl.weapon_config_info_bl import WeaponConfigInfoBL
 from database.bl.weapon_info_bl import WeaponInfoBL
 from database.dbcp_manager import DBCPManager
-from info.enemy_info import EnemyInfo
 from info.maze_info import MazeInfo
 from info.player_info import PlayerInfo
 from info.weapon_info import WeaponInfo
 from info.user_info import UserInfo
-from message_from_client.system_mfc import SystemMessageFromClient
+from message.message_from_client.system_mfc import SystemMessageFromClient
 from util.maze_generator import MazeGenerator
 
 

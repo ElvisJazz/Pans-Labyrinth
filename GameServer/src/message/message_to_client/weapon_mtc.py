@@ -5,7 +5,7 @@
 # ======================================================================
 from info.weapon_info import WeaponInfo
 from constant.message_type import MessageType
-from message_to_client.empty import Empty
+from message.message_to_client.empty import Empty
 
 
 class WeaponMessageToClient(object):

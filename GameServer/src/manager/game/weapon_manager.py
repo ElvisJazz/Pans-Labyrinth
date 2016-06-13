@@ -4,11 +4,12 @@
 # Date: 2016.5.28
 # ======================================================================
 import threading
+
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
 from database.bl.weapon_info_bl import WeaponInfoBL
-from message_from_client.weapon_mfc import WeaponMessageFromClient
-from message_to_client.weapon_mtc import WeaponMessageToClient
+from message.message_from_client.weapon_mfc import WeaponMessageFromClient
+from message.message_to_client.weapon_mtc import WeaponMessageToClient
 import manager.manager_online
 import dispatcher
 

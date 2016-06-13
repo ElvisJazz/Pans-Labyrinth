@@ -6,7 +6,7 @@
 import json
 
 from constant.message_mark import MessageMark
-from message_from_client.enemy_mfc import EnemyMessageFromClient
+from message.message_from_client.enemy_mfc import EnemyMessageFromClient
 from message_from_client.player_mfc import PlayerMessageFromClient
 from message_from_client.system_mfc import SystemMessageFromClient
 from message_from_client.weapon_mfc import WeaponMessageFromClient

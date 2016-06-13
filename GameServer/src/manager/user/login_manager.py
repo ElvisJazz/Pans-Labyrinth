@@ -6,7 +6,7 @@
 from database.bl.user_info_bl import UserInfoBL
 from database.dbcp_manager import DBCPManager
 from info.user_info import UserInfo
-from message_from_client.system_mfc import SystemMessageFromClient
+from message.message_from_client.system_mfc import SystemMessageFromClient
 
 
 class LoginManager(object):

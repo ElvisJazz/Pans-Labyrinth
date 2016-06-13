@@ -6,10 +6,10 @@
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
 from database.bl.player_info_bl import PlayerInfoBL
-from message_from_client.player_mfc import PlayerMessageFromClient
+from message.message_from_client.player_mfc import PlayerMessageFromClient
 import manager.manager_online
 import dispatcher
-from message_to_client.player_mtc import PlayerMessageToClient
+from message.message_to_client.player_mtc import PlayerMessageToClient
 
 
 class PlayerManager(object):

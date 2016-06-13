@@ -7,17 +7,17 @@
 from __future__ import division
 import math
 import threading
+
 from constant.enemy_action_type import EnemyActionType
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
 from database.bl.enemy_config_info_bl import EnemyConfigInfoBL
 from database.bl.enemy_info_bl import EnemyInfoBL
-from database.dbcp_manager import DBCPManager
 from info.enemy_info import EnemyInfo
-from message_from_client.enemy_mfc import EnemyMessageFromClient
+from message.message_from_client.enemy_mfc import EnemyMessageFromClient
 import manager.manager_online
 import dispatcher
-from message_to_client.enemy_mtc import EnemyMessageToClient
+from message.message_to_client.enemy_mtc import EnemyMessageToClient
 from util.position import Position
 from util.routine_generator import RoutineGenerator
 

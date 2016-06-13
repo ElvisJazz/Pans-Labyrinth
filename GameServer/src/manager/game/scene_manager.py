@@ -4,10 +4,11 @@
 # Date: 2016.5.28
 # ======================================================================
 import json
+
 from constant.message_target_type import MessageTargetType
 from constant.message_type import MessageType
 from database.bl.maze_info_bl import MazeInfoBL
-from message_to_client.maze_mtc import MazeMessageToClient
+from message.message_to_client.maze_mtc import MazeMessageToClient
 import dispatcher
 import manager.manager_online
 
